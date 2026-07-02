@@ -30,10 +30,10 @@
           </tr>
         </thead>
         <tbody v-if="educationTodo" class="divide-y divide-gray-200">
-          <tr v-for="(items, index) in educationTodo.data" key="index" class="*:text-gray-900 *:first:font-medium font-light text-sm">
+          <tr v-for="(items, index) in educationTodo.data" :key="index" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr6Nt-nbIsUrlIbEpE8xdWuY_WK8jwvr2uBTHVm5PLimYKzi73XkGUyRvb&s=10" alt="logo_url" class="h-5"></td>
+            <td class="p-1"><img :src="`http://localhost:5002/uploads/${items.logo}`"  alt="" class="h-5"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.major }}</td>
             <td class="p-1">{{ items.gpa }}</td>
@@ -41,9 +41,9 @@
             <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
-              <button class="px-1 mx-1 text-green-500 border">view</button>
-              <button class="px-1 mx-1 text-yellow-500 border" @click="isOpen = true">edit</button>
-              <button class="px-1 mx-1 text-red-500 border">delete</button>
+                <button class="px-1 mx-1 text-green-500 border">view</button>
+                <button class="px-1 mx-1 text-yellow-500 border">edit</button>
+                <button class="px-1 mx-1 text-red-500 border">delete</button>
             </td>
           </tr>
         </tbody>

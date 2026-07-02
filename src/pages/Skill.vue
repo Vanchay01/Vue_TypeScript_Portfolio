@@ -28,10 +28,10 @@
           </tr>
         </thead>
         <tbody v-if="skillTodo" class="divide-y divide-gray-200">
-          <tr v-for="(items, index) in skillTodo.data" class="*:text-gray-900 *:first:font-medium font-light text-sm">
+          <tr v-for="(items, index) in skillTodo.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img :src="items.logo_url" alt="logo_url" class="h-5"></td>
+            <td class="p-1"><img :src="items.logo_url" alt="logo" class="h-5"></td>
             <td class="p-1">{{items.name}}</td>
             <td class="p-1">{{items.rating}}%</td>
             <td class="p-1">{{ items.created_at }}</td>

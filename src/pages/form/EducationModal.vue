@@ -99,7 +99,14 @@ const handleLogo = (event: Event) => {
   }
 };
 const addEdu = () => {
-  console.log(form);
+  console.log({
+    name: form.name,
+    major: form.major,
+    gpa: form.gpa,
+    date_start: form.date_start,
+    date_end: form.date_end,
+    logo: form.logo,
+  });
   const ok = window.confirm("Are you sure!!!");
   if (!ok) return;
   emit("close");
