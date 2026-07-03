@@ -7,6 +7,11 @@
     <div
       class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
     >
+    <div v-if="formError">
+      <div v-for="(err, index) in formError" :key="index">
+        <p>{{ err.f }}</p>
+      </div>
+    </div>
       <!-- Body -->
       <form action="" @submit.prevent="addEdu" class="flex flex-col gap-1">
         <label for="">name</label>
@@ -40,6 +45,7 @@
     <div
       class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
     >
+    
       <form action="" @submit.prevent="addEdu" class="flex flex-col gap-1">
         <label for="">name</label>
         <input type="text" v-model="form.name" class="border" />
@@ -72,8 +78,10 @@
   </article>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import type { EducationFrom } from "../../types/education";
+import { useEducation } from "../../composables/useEducation";
+import { educationSchema } from "../../validation/education.schema";
 
 const props = defineProps({
   add: Boolean,
@@ -84,31 +92,33 @@ const closeModal = () => {
   emit("close");
 };
 // API --------------------------------------------------
+const { addEducation } = useEducation()
 const form = reactive<EducationFrom>({
   name: "",
   major: "",
   gpa: "",
   date_start: "",
   date_end: "",
-  logo: null,
+  image: null,
 });
+const formError = ref("");
 const handleLogo = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    form.logo = target.files[0];
+    form.image = target.files[0];
   }
 };
-const addEdu = () => {
-  console.log({
-    name: form.name,
-    major: form.major,
-    gpa: form.gpa,
-    date_start: form.date_start,
-    date_end: form.date_end,
-    logo: form.logo,
-  });
+const addEdu = async () => {
+  const result = educationSchema.safeParse(form);
+
+  if (!result.success) {
+    formError.value = result.error.issues[0].message;
+    return;
+  }
   const ok = window.confirm("Are you sure!!!");
   if (!ok) return;
+  await addEducation(form as any); 
   emit("close");
 };
+console.log(formError)
 </script>

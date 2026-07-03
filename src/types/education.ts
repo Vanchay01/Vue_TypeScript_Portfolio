@@ -6,7 +6,7 @@ export interface Education  {
     date_start: string,
     date_end:  string,
     created_at: string,
-    logo: File | null
+    logo: string | null
     degres: []
 }
 
@@ -16,5 +16,5 @@ export interface EducationFrom{
     gpa: string,
     date_start: string,
     date_end:  string,
-    logo: File | null
+    image: File | null
 }

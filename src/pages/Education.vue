@@ -14,7 +14,7 @@
     </EducationModal>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <Table class="min-w-full divide-y-2 divide-gray-200">
+      <table class="min-w-full divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
             <th class="p-1">No.</th>
@@ -30,7 +30,7 @@
           </tr>
         </thead>
         <tbody v-if="educationTodo" class="divide-y divide-gray-200">
-          <tr v-for="(items, index) in educationTodo.data" :key="index" class="*:text-gray-900 *:first:font-medium font-light text-sm">
+          <tr v-for="(items, index) in educationTodo.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
             <td class="p-1"><img :src="`http://localhost:5002/uploads/${items.logo}`"  alt="" class="h-5"></td>
@@ -58,7 +58,7 @@ import { useEducation } from "../composables/useEducation";
 import EducationModal from "./form/EducationModal.vue";
 const isOpen = ref(false);
 
-const { isLoading, errMessage, educationTodo, addEducation, loadEducation } = useEducation();
+const { isLoading, errMessage, educationTodo, loadEducation } = useEducation();
 
 onMounted(() => {
   loadEducation();
