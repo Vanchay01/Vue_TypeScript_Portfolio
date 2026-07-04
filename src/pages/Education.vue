@@ -3,15 +3,8 @@
     <h1 class="font-normal text-2xl">Education Management</h1>
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Education Management</p>
-      <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
+      <button @click="openAdd" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
     </div>
-    <EducationModal
-      :add="isOpen"
-      :edit="isOpen"
-      @close="isOpen = false"
-    >
-      <p>This is adding Edcation page</p>
-    </EducationModal>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <table class="min-w-full divide-y-2 divide-gray-200">
@@ -41,14 +34,25 @@
             <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
-                <button class="px-1 mx-1 text-green-500 border">view</button>
-                <button class="px-1 mx-1 text-yellow-500 border">edit</button>
+                <button class="px-1 mx-1 text-green-500 border" @click="openDetail">view</button>
+                <button @click="openEdit(items)" class="px-1 mx-1 text-yellow-500 border">edit</button>
                 <button class="px-1 mx-1 text-red-500 border">delete</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <!-- EducationModal-------------------------------------------------------------------- -->
+    <EducationModal
+      :add="isOpen"
+      :edit="isOpen"
+      :education="selectedEducation"
+      @close="isOpen = false">
+    </EducationModal>
+    <!-- EducationModal-------------------------------------------------------------------- -->
+    <EducationDetail
+      @close="isDetail = false">
+    </EducationDetail>
   </article>
 </template>
 
@@ -56,10 +60,30 @@
 import { onMounted, ref } from "vue";
 import { useEducation } from "../composables/useEducation";
 import EducationModal from "./form/EducationModal.vue";
-const isOpen = ref(false);
+import type { Education } from "../types/education.ts";
+import EducationDetail from "./Detail_page/EducationDetail.vue";
+
 
 const { isLoading, errMessage, educationTodo, loadEducation } = useEducation();
+const selectedEducation = ref<Education | null>(null)
+// Edu_Modals ----------------------------------------------------
+const isOpen = ref(false);
+const openAdd = () => {
+  selectedEducation.value = null
+  isOpen.value = true
+}
+const openEdit = (items: Education) => {
+  selectedEducation.value = items
+  isOpen.value = true
+}
 
+// Edu_Details ----------------------------
+const isDetail = ref(false)
+const openDetail = () => {
+  isDetail.value = true
+}
+
+// onMounted -------------------------------------------------------
 onMounted(() => {
   loadEducation();
 });
