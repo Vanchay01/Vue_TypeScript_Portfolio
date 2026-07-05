@@ -51,9 +51,5 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: "Profile",
-};
+<script setup lang="ts">
 </script>
-<style lang=""></style>

@@ -47,7 +47,7 @@
   </article>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';import EducationModal from "./form/EducationModal.vue";
+import { ref } from 'vue';import EducationModal from "./education/EducationModal.vue";
 import { useTool } from '../composables/useTool.ts';
 const testLogo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMNvJTHvVkFO-miBKZ088HWzUok2IKyJZ0r02WUVCwag&s"
 // Other Function ----------------------------------------------------------------------------------

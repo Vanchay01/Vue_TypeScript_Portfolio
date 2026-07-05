@@ -4,15 +4,14 @@
     <div class="absolute inset-0 bg-black/50" @click="closeDetail"></div>
     <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
-       okok
+       Education_Detail
     </div>
     </article>
 </template>
-<script setup>
-
+<script setup lang="ts">
     // CloseDetail ------------------------------------------------
     const emit = defineEmits(["close"]);
-    const v = () => {
+    const closeDetail = () => {
     emit("close");
 };
 </script>

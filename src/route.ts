@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Profile from './pages/Profile.vue'
-import Education from './pages/Education.vue'
+import Education from './pages/education/Education.vue'
 import Dashboard from './pages/Dashboard.vue'
 import Work from './pages/Work.vue'
 import Skill from './pages/Skill.vue'

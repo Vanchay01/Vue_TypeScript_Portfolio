@@ -58,11 +58,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useEducation } from "../composables/useEducation";
-import EducationModal from "./form/EducationModal.vue";
-import type { Education } from "../types/education.ts";
-import EducationDetail from "./Detail_page/EducationDetail.vue";
-
+import { useEducation } from "../../composables/useEducation";
+import type { Education } from "../../types/education";
+import EducationModal from "./EducationModal.vue";
+import EducationDetail from "./EducationDetail.vue";
 
 const { isLoading, errMessage, educationTodo, loadEducation } = useEducation();
 const selectedEducation = ref<Education | null>(null)

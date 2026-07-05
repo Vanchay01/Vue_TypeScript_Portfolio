@@ -48,7 +48,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import EducationModal from "./form/EducationModal.vue";
+import EducationModal from "./education/EducationModal.vue";
 import { useSkill } from '../composables/useSkill.ts';
 // Other Function ----------------------------------------------------------------------------------
 const isOpen = ref(false)
