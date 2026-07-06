@@ -44,15 +44,15 @@
     </div>
     <!-- EducationModal-------------------------------------------------------------------- -->
     <EducationModal
-      :add="isOpen"
-      :edit="isOpen"
+      :openModal="isOpen"
       :education="selectedEducation"
+      :statusModal="isStatus"
       @close="isOpen = false">
     </EducationModal>
     <!-- EducationModal-------------------------------------------------------------------- -->
-    <EducationDetail
+    <!-- <EducationDetail
       @close="isDetail = false">
-    </EducationDetail>
+    </EducationDetail> -->
   </article>
 </template>
 
@@ -67,13 +67,21 @@ const { isLoading, errMessage, educationTodo, loadEducation } = useEducation();
 const selectedEducation = ref<Education | null>(null)
 // Edu_Modals ----------------------------------------------------
 const isOpen = ref(false);
+const isStatus = ref("");
+// Add Modal ----------------------------
 const openAdd = () => {
   selectedEducation.value = null
   isOpen.value = true
+  isStatus.value = "add"
 }
+// Edit Modal ----------------------------
 const openEdit = (items: Education) => {
   selectedEducation.value = items
   isOpen.value = true
+  isStatus.value = "edit"
+  console.log({
+    selected: selectedEducation.value
+  })
 }
 
 // Edu_Details ----------------------------

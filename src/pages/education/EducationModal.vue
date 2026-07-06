@@ -1,11 +1,12 @@
 <template>
-  <article v-if="props.add || props.edit" class="fixed inset-0 z-50 flex items-center justify-center">
+  <article v-if="props.openModal" class="fixed inset-0 z-50 flex items-center justify-center">
     <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
     <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
       <div class="w-full flex justify-between">
-        <p v-if="props.add" class="font-medium text-sm">Add Education</p>
-        <p v-if="props.edit" class="font-medium text-sm">Edit Education</p>
+        <p v-if="statusModal === 'add'" class="font-medium text-sm">Add Education</p>
+        <p v-if="statusModal === 'edit'" class="font-medium text-sm">Edit Education</p>
+        <p class="font-medium text-sm">ID: {{ props.selectedEducation }}</p>
         <button @click="closeModal" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
       <div v-if="validator" class="">
@@ -24,8 +25,8 @@
         <input type="date" v-model="form.date_end" class="border" />
         <label for="">Logo</label>
         <input type="file" @change="handleLogo" class="border" /><br />
-        <button v-if="props.add" type="submit" class="border text-blue-500 bg-blue-500/20" >Add</button>
-        <button v-else-if="props.edit" type="submit" class="border text-yellow-500 bg-yellow-500/20">Edit</button>
+        <button v-if="statusModal === 'add'" type="submit" class="border text-blue-500 bg-blue-500/20" >Add</button>
+        <button v-if="statusModal === 'edit'" type="submit" class="border text-yellow-500 bg-yellow-500/20">Edit</button>
       </form>
     </div>
   </article>
@@ -37,9 +38,22 @@ import { useEducation } from "../../composables/useEducation";
 import { educationSchema } from "../../validation/education.schema";
 
 const props = defineProps({
-  add: Boolean, 
-  edit: Boolean,
+  openModal: {
+    type: Boolean,
+    required: false
+  },
+  statusModal: {
+    type: String,
+    required: false
+  },
+  selectedEducation: {
+    type: Object,
+    required: false
+  },
+
 });
+
+
 const emit = defineEmits(["close"]);
 const closeModal = () => {
   emit("close");

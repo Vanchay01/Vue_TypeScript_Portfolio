@@ -7,10 +7,12 @@ import Skill from './pages/Skill.vue'
 import Tool from './pages/Tool.vue'
 import Feature from './pages/Feature.vue'
 import Technology from './pages/Technology.vue'
+import Parent from './pages/test-modal-components/Parent.vue'
 
 
 const routes =[
     {path: '/', component: Dashboard},
+    {path: '/parent', component: Parent},
     {path: '/profile', component: Profile},
     {path: '/education', component: Education},
     {path: '/skill', component: Skill},
