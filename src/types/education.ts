@@ -15,6 +15,6 @@ export interface EducationFrom{
     major: string,
     gpa: string,
     date_start: string,
-    date_end:  string,
-    image: File | null
+    date_end: string,
+    logo: File | null
 }

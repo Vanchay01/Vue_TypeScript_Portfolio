@@ -7,15 +7,8 @@
   </article>
 </template>
 
-<script>
-import Footer from "./components/Footer.vue";
-import SideMenu from "./components/SideMenu.vue";
+<script setup lang="ts">
+import SideMenu from './components/SideMenu.vue';
 
-export default {
-  name: "App",
-  components: {
-    SideMenu,
-    Footer,
-  },
-};
+
 </script>

@@ -1,9 +1,9 @@
 // services/education.service.ts
 import { educationAPI } from "../api/education.api";
-import type { Education } from "../types/education";
+import type { EducationFrom } from "../types/education";
 
 // add education ----------------------------------------------------------------
-export const addEducation = async (data: Education) => {
+export const addEducation = async (data: EducationFrom) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -14,6 +14,6 @@ export const addEducation = async (data: Education) => {
 }
 
 // fetch education ----------------------------------------------------------------
-export const getEducation = async () => {
-    return await educationAPI.getEducation()
+export const getEducation = () => {
+    return educationAPI.getAll()
 }

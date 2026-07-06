@@ -6,7 +6,7 @@
       <div class="w-full flex justify-between">
         <p v-if="statusModal === 'add'" class="font-medium text-sm">Add Education</p>
         <p v-if="statusModal === 'edit'" class="font-medium text-sm">Edit Education</p>
-        <p class="font-medium text-sm">ID: {{ props.selectedEducation }}</p>
+        <p class="font-medium text-sm">ID: {{ props.selectedEducation?.id }}</p>
         <button @click="closeModal" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
       <div v-if="validator" class="">

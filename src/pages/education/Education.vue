@@ -3,10 +3,12 @@
     <h1 class="font-normal text-2xl">Education Management</h1>
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Education Management</p>
-      <button @click="openAdd" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
+      <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
     </div>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
+      <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
+      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">No education found.</div>
       <table class="min-w-full divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
@@ -22,8 +24,8 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
-        <tbody v-if="educationTodo" class="divide-y divide-gray-200">
-          <tr v-for="(items, index) in educationTodo.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
+        <tbody v-if="education" class="divide-y divide-gray-200">
+          <tr v-for="(items, index) in education" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
             <td class="p-1"><img :src="`http://localhost:5002/uploads/${items.logo}`"  alt="" class="h-5"></td>
@@ -34,64 +36,155 @@
             <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
-                <button class="px-1 mx-1 text-green-500 border" @click="openDetail">view</button>
-                <button @click="openEdit(items)" class="px-1 mx-1 text-yellow-500 border">edit</button>
+                <button class="px-1 mx-1 text-green-500 border">view</button>
+                <button @click="handleEdit(items)" class="px-1 mx-1 text-yellow-500 border">edit</button>
                 <button class="px-1 mx-1 text-red-500 border">delete</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <div v-if="loading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <!-- EducationModal-------------------------------------------------------------------- -->
-    <EducationModal
-      :openModal="isOpen"
-      :education="selectedEducation"
-      :statusModal="isStatus"
-      @close="isOpen = false">
-    </EducationModal>
-    <!-- EducationModal-------------------------------------------------------------------- -->
-    <!-- <EducationDetail
-      @close="isDetail = false">
-    </EducationDetail> -->
+    <section v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
+      <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+      <!-- Body ------------------------------------------------------------------------->
+      <div class="w-full flex justify-between">
+        <p v-if="editId" class="font-medium text-sm">Edit Education</p>
+        <p v-else class="font-medium text-sm">Add Education</p>
+        <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
+      </div>
+      <div v-if="validator" class="">
+          <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
+      </div>
+      <form action="" @submit.prevent="handleSumbit" class="flex flex-col gap-1">
+        <label for="">Name</label>
+        <input type="text" v-model="form.name" class="border" />
+        <label for="">Major</label>
+        <input type="text" v-model="form.major" class="border" />
+        <label for="">GPA</label>
+        <input type="text" v-model="form.gpa" class="border" />
+        <label for="">Data_start</label>
+        <input type="date" v-model="form.date_start" class="border" />
+        <label for="">Data_end</label>
+        <input type="date" v-model="form.date_end" class="border" />
+        <label for="">Logo</label>
+        <input type="file" id="imageInputId" @change="handleLogo" class="hidden" /><br />
+        <label htmlFor="imageInputId" className="border border-[#22223A] bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer"> 
+          <img   
+            v-if="previewLogo"
+            :src="previewLogo"
+            alt="No Image"
+            className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+          />
+          <img
+            v-else-if="editId"
+            :src="previewLogo"
+            alt="No Image"
+            className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+          /> 
+          <span v-else className="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
+            <!-- {preview ? (
+                <img
+                    src={preview}
+                    alt="No Image"
+                    className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+                /> 
+            ) : editId? (
+                <img
+                    src={`http://localhost:5000/uploads/${form.image}`}
+                    alt="No Image"
+                    className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+                /> 
+            ) : (
+                <span className="text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"><RiImage2Line size={30} color="#66668A"/> Click to upload</span>
+            )} -->
+                
+        </label>
+        <button type="submit" class="border text-blue-500 bg-blue-500/20" >Add</button>
+        <button @click="handleCancel" type="button" class="border text-yellow-500 bg-yellow-500/20" >Cancel</button>
+      </form>
+    </div>
+  </section>
+
   </article>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { useEducation } from "../../composables/useEducation";
-import type { Education } from "../../types/education";
-import EducationModal from "./EducationModal.vue";
-import EducationDetail from "./EducationDetail.vue";
+import { onMounted, reactive, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useEducationStore } from "../../store/education.ts";
+import type { Education, EducationFrom } from "../../types/education.ts";
+import { educationSchema } from "../../validation/education.schema.ts";
 
-const { isLoading, errMessage, educationTodo, loadEducation } = useEducation();
-const selectedEducation = ref<Education | null>(null)
-// Edu_Modals ----------------------------------------------------
-const isOpen = ref(false);
-const isStatus = ref("");
-// Add Modal ----------------------------
-const openAdd = () => {
-  selectedEducation.value = null
-  isOpen.value = true
-  isStatus.value = "add"
-}
-// Edit Modal ----------------------------
-const openEdit = (items: Education) => {
-  selectedEducation.value = items
-  isOpen.value = true
-  isStatus.value = "edit"
-  console.log({
-    selected: selectedEducation.value
-  })
-}
 
-// Edu_Details ----------------------------
-const isDetail = ref(false)
-const openDetail = () => {
-  isDetail.value = true
-}
+// Event Open Modal -------------------------------------------------------
+const isOpen = ref<boolean>(false);
+ 
+
+// API -------------------------------------------------------
+const educationStore = useEducationStore();
+const { education, loading, error } = storeToRefs(useEducationStore());
+
+// Swap to Edit Modal -------------------------------------------------------
+const editId = ref<number | null>(null);
+const previewLogo = ref<string | null>(null); 
+const handleEdit = (education: Education) => {
+  isOpen.value = true;
+  previewLogo.value = education.logo ? `http://localhost:5002/uploads/${education.logo}` : null;
+  editId.value = education.id;
+  form.name = education.name;
+  form.major = education.major;
+  form.gpa = education.gpa;
+  form.date_start = education.date_start;
+  form.date_end = education.date_end;
+  // form.logo = education.logo; 
+  
+};
+// handleCancel -------------------------------------------------------
+const handleCancel = () => {
+  isOpen.value = false;
+  editId.value = null;
+  previewLogo.value = null;
+  form.name = "";
+  form.major = "";
+  form.gpa = "";
+  form.date_start = "";
+  form.date_end = "";
+  form.logo = null;
+};
+
+// handleSubmit -------------------------------------------------------
+const form = reactive<EducationFrom>({
+  name: "",
+  major: "",
+  gpa: "",
+  date_start: "",
+  date_end: "",
+  logo: null,
+});
+const validator = ref<{ message: string }[]>([]);
+const handleLogo = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    form.logo = target.files[0];
+    previewLogo.value = URL.createObjectURL(target.files[0]);
+  }
+};
+const handleSumbit = async () => {
+  const result = educationSchema.safeParse(form);
+  if (!result.success) {
+    validator.value = result.error.issues;
+    return;
+  }
+  const ok = window.confirm("Are you sure!!!");
+  if (!ok) return;
+  console.log("Form submitted:", form);
+};
 
 // onMounted -------------------------------------------------------
 onMounted(() => {
-  loadEducation();
+  educationStore.LoadForm()
 });
 </script>

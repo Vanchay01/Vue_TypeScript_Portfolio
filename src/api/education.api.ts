@@ -1,19 +1,24 @@
+import type { apiResponse } from "../types/apiResponse";
+import type { Education } from "../types/education";
 import { apiURL } from "./apiURL";
 
 export const educationAPI = {
   // add education ----------------------------------------------------------------
-  async addEducation(data: FormData) {
-    return await apiURL.post('/education', data);
+  async addEducation(fromData: FormData): Promise<apiResponse<Education[]>> {
+    const { data } = await apiURL.post<apiResponse<Education[]>>('/education', fromData);
+    return data;
   },
 
   // get education ----------------------------------------------------------------
-  async getEducation() {
-    return await apiURL.get(`/education`);
+  async getAll(): Promise<apiResponse<Education[]>> {
+    const { data } = await apiURL.get<apiResponse<Education[]>>("/education");
+    return data;
   },
 
   // get education by ID ----------------------------------------------------------
-  async getEducationById(id: number) {
-    return await apiURL.get(`/education/${id}`);
+  async getEducationById(id: number): Promise<apiResponse<Education>> {
+    const { data } = await apiURL.get<apiResponse<Education>>(`/education/${id}`);
+    return data;
   },
 
   // update education -------------------------------------------------------------

@@ -24,7 +24,7 @@ const loadEducation = async () => {
   isLoading.value = true;
   try {
     const res = await educationService.getEducation();
-    educationTodo.value = res.data;
+    // educationTodo.value = res.data;
     return res;
   } catch (err: any) {
     errMessage.value = err.message;
