@@ -10,6 +10,7 @@ export const addEducation = async (data: EducationFrom) => {
             formData.append(key, value as any)
         }
     })
+    console.log("Testing => FormData:", formData);
     return await educationAPI.addEducation(formData)
 }
 

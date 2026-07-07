@@ -85,22 +85,6 @@
             className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           /> 
           <span v-else className="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
-            <!-- {preview ? (
-                <img
-                    src={preview}
-                    alt="No Image"
-                    className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-                /> 
-            ) : editId? (
-                <img
-                    src={`http://localhost:5000/uploads/${form.image}`}
-                    alt="No Image"
-                    className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-                /> 
-            ) : (
-                <span className="text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"><RiImage2Line size={30} color="#66668A"/> Click to upload</span>
-            )} -->
-                
         </label>
         <button type="submit" class="border text-blue-500 bg-blue-500/20" >Add</button>
         <button @click="handleCancel" type="button" class="border text-yellow-500 bg-yellow-500/20" >Cancel</button>
@@ -117,6 +101,7 @@ import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
+import { addEducation } from "../../services/educationService.ts";
 
 
 // Event Open Modal -------------------------------------------------------
@@ -129,10 +114,10 @@ const { education, loading, error } = storeToRefs(useEducationStore());
 
 // Swap to Edit Modal -------------------------------------------------------
 const editId = ref<number | null>(null);
-const previewLogo = ref<string | null>(null); 
+const previewLogo = ref<string>(""); 
 const handleEdit = (education: Education) => {
   isOpen.value = true;
-  previewLogo.value = education.logo ? `http://localhost:5002/uploads/${education.logo}` : null;
+  previewLogo.value = education.logo ? `http://localhost:5002/uploads/${education.logo}` : "";
   editId.value = education.id;
   form.name = education.name;
   form.major = education.major;
@@ -146,7 +131,7 @@ const handleEdit = (education: Education) => {
 const handleCancel = () => {
   isOpen.value = false;
   editId.value = null;
-  previewLogo.value = null;
+  previewLogo.value = "";
   form.name = "";
   form.major = "";
   form.gpa = "";
@@ -157,11 +142,11 @@ const handleCancel = () => {
 
 // handleSubmit -------------------------------------------------------
 const form = reactive<EducationFrom>({
-  name: "",
-  major: "",
+  name: "vanchay",
+  major: "IT",
   gpa: "",
-  date_start: "",
-  date_end: "",
+  date_start: "2024-09-19",
+  date_end: "2024-10-19",
   logo: null,
 });
 const validator = ref<{ message: string }[]>([]);
@@ -180,6 +165,11 @@ const handleSumbit = async () => {
   }
   const ok = window.confirm("Are you sure!!!");
   if (!ok) return;
+  const res = await addEducation(form);
+  if (res) {
+    await educationStore.LoadForm();
+    handleCancel();
+  }
   console.log("Form submitted:", form);
 };
 
