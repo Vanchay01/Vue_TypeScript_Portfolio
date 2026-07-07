@@ -34,7 +34,9 @@ export const educationAPI = {
   },
 
   // delete education -------------------------------------------------------------
-  async deleteEducation(id: number) {
-    return await apiURL.delete(`/education/${id}`);
+  async deleteEducation(id: number): Promise<apiResponse<Education>>{
+    const {data} = await apiURL.delete<apiResponse<Education>>(`/education/${id}`);
+    return data
   },
+  
 };

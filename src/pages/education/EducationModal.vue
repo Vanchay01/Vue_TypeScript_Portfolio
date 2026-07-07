@@ -66,13 +66,13 @@ const form = reactive<EducationFrom>({
   gpa: "",
   date_start: "",
   date_end: "",
-  image: null,
+  logo: null,
 });
 const validator = ref<{ message: string }[]>([]);
 const handleLogo = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    form.image = target.files[0];
+    form.logo = target.files[0];
   }
 };
 const addEdu = async () => {

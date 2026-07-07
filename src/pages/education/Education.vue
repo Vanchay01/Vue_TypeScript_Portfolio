@@ -8,7 +8,7 @@
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
-      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">No education found.</div>
+      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
       <table class="min-w-full divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
@@ -36,9 +36,9 @@
             <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
-                <button class="px-1 mx-1 text-green-500 border">view</button>
-                <button @click="handleEdit(items)" class="px-1 mx-1 text-yellow-500 border">edit</button>
-                <button class="px-1 mx-1 text-red-500 border">delete</button>
+                <button class="px-1 mx-1 text-green-500 border cursor-pointer">view</button>
+                <button @click="handleEdit(items)" class="px-1 mx-1 text-yellow-500 border cursor-pointer">edit</button>
+                <button class="px-1 mx-1 text-red-500 border cursor-pointer">delete</button>
             </td>
           </tr>
         </tbody>
@@ -59,30 +59,30 @@
           <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
       </div>
       <form action="" @submit.prevent="handleSumbit" class="flex flex-col gap-1">
-        <label for="">Name</label>
+        <label for="nameId">Name</label>
         <input type="text" v-model="form.name" class="border" />
-        <label for="">Major</label>
+        <label for="majorId">Major</label>
         <input type="text" v-model="form.major" class="border" />
-        <label for="">GPA</label>
+        <label for="gpaId">GPA</label>
         <input type="text" v-model="form.gpa" class="border" />
-        <label for="">Data_start</label>
+        <label for="dateStartId">Data_start</label>
         <input type="date" v-model="form.date_start" class="border" />
-        <label for="">Data_end</label>
+        <label for="dateEndId">Data_end</label>
         <input type="date" v-model="form.date_end" class="border" />
-        <label for="">Logo</label>
-        <input type="file" id="imageInputId" @change="handleLogo" class="hidden" /><br />
-        <label htmlFor="imageInputId" className="border border-[#22223A] bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer"> 
+        <label for="logoId">Logo</label>
+        <input id="logoId" type="file" @change="handleLogo" class="hidden" /><br />
+        <label for="logoId" className="border border-[#22223A] bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer"> 
           <img   
             v-if="previewLogo"
             :src="previewLogo"
             alt="No Image"
-            className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           />
           <img
             v-else-if="editId"
             :src="previewLogo"
             alt="No Image"
-            className="h-[45px] object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           /> 
           <span v-else className="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
         </label>
@@ -142,10 +142,10 @@ const handleCancel = () => {
 
 // handleSubmit -------------------------------------------------------
 const form = reactive<EducationFrom>({
-  name: "vanchay",
-  major: "IT",
-  gpa: "",
-  date_start: "2024-09-19",
+  name: "School of Information Technology",
+  major: "Computer Science",
+  gpa: "3.5",
+  date_start: "2020-09-19",
   date_end: "2024-10-19",
   logo: null,
 });
@@ -157,22 +157,22 @@ const handleLogo = (event: Event) => {
     previewLogo.value = URL.createObjectURL(target.files[0]);
   }
 };
+// ---
 const handleSumbit = async () => {
   const result = educationSchema.safeParse(form);
   if (!result.success) {
     validator.value = result.error.issues;
     return;
   }
-  const ok = window.confirm("Are you sure!!!");
-  if (!ok) return;
+  // const ok = window.confirm("Are you sure!!!");
+  // if (!ok) return;
   const res = await addEducation(form);
   if (res) {
     await educationStore.LoadForm();
     handleCancel();
   }
-  console.log("Form submitted:", form);
 };
-
+//
 // onMounted -------------------------------------------------------
 onMounted(() => {
   educationStore.LoadForm()
