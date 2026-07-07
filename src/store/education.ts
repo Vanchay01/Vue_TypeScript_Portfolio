@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import { addEducation, getEducation } from "../services/educationService";
+import { addEducation, deleteEducation, getEducation, getEducationById } from "../services/educationService";
 import type { Education, EducationFrom } from "../types/education";
 
 
 interface EducationState {
     education: Education[];
+    currentEducation: Education | null;
     loading: boolean;
     error: string | null;
 }
@@ -12,6 +13,7 @@ interface EducationState {
 export const useEducationStore = defineStore("education", {
     state: (): EducationState => ({
         education: [],
+        currentEducation: null,
         loading: false,
         error: null,
     }),
@@ -34,7 +36,6 @@ export const useEducationStore = defineStore("education", {
             this.loading = true;
             try {
                 const response = await addEducation(newEducation);
-                console.log("Education data fetched:", response);
                 this.education = response.data;
             } catch (error: any) {
                 this.error = error.message || "An error occurred while fetching education data.";
@@ -43,10 +44,29 @@ export const useEducationStore = defineStore("education", {
             }
         },
         // DeleteEducation ------------------------------------------------
-        async DeleteEducation(id: number) {
+        async findOne(id: number){
+            this.loading = true
+            try {
+                const response = await getEducationById(id)
+                this.currentEducation = response.data
+                await this.LoadForm()
+                return response.data 
+            } catch (error: any) {
+                this.error = error.message
+            } finally {
+                this.loading = false
+            }
+        },
+        // DeleteEducation ------------------------------------------------
+        async deleteEducation(id: number) {
             this.loading = true;
             try {
-                const res = await deleteEducation(id);
+                const response = await deleteEducation(id);
+                return response.data 
+            } catch (error: any) {
+                this.error = error.message
+            } finally {
+                this.loading = false
             }
         }
     }

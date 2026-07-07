@@ -18,3 +18,13 @@ export const addEducation = async (data: EducationFrom) => {
 export const getEducation = () => {
     return educationAPI.getAll()
 }
+
+// get education by ID ----------------------------------------------------------------
+export const getEducationById = (id: number) => {
+    return educationAPI.getEducationById(id)
+}
+
+// delete education ------------------------------------------------------
+export const deleteEducation = (id: number) => {
+    return educationAPI.deleteEducation(id)
+}

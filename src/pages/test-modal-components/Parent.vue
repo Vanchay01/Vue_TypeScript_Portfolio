@@ -1,15 +1,14 @@
 <template>
     <article>
-        
-        <div class="w-full flex justify-between border p-1">
+        <div v-for="(items, index) in education" :key="index" class="w-full flex justify-between border p-1">
             <p class="font-normal text-sm">Education Management</p>
-            <button @click="openChildAdd" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add</button>
-            <button @click="openChildEdit" class="px-1 mx-1 border text-yellow-500 font-normal text-sm cursor-pointer">Edit</button>
+             <p class="font-normal text-sm">test: {{ items.id }}</p>
+            <button @click="handleViewOne(items.id)" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add</button>
+            <!-- <button @click="openChildEdit" class="px-1 mx-1 border text-yellow-500 font-normal text-sm cursor-pointer">Edit</button> -->
         </div>
-        <p>This is a simple parent component.</p>
         <Child
             :openModal="isChildOpen"
-            :result="isResultOpen"
+            :educationOne="educationOne"
             @end="isChildOpen = false"
         />
     </article>
@@ -17,22 +16,22 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Child from './Child.vue';
+import { storeToRefs } from 'pinia';
+import { useEducationStore } from '../../store/education.ts';
+import type { Education } from '../../types/education.ts';
+
+// call EducationStore ----------------------------
+const {education } = storeToRefs(useEducationStore())
 
 
 // Child Open with add ----------------------------
-const isResultOpen = ref("")
 const isChildOpen = ref(false)
-const openChildAdd = () => {
+const educationOne = ref<Education>()
+
+const educationStore = useEducationStore()
+
+const handleViewOne = async (id: number) => {
   isChildOpen.value = true
-  isResultOpen.value = "add"
+  educationOne.value = await educationStore.findOne(id)
 }
-
-// Child Open with edit ----------------------------
-const openChildEdit = () => {
-  isChildOpen.value = true,
-  isResultOpen.value = "edit"
-}
-
-
-// Child Open with add ----------------------------
 </script>

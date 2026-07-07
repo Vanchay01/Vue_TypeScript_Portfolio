@@ -3,30 +3,26 @@
     <div class="absolute inset-0 bg-black/50" @click="closeModal"></div>
     <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
-       <p v-if="result === 'add'"> add </p>
-       <p v-if="result === 'edit'"> edit </p>
+       <div>Test: {{educationOne?.name}}</div>
     </div>
     </article>
 </template>
 <script setup lang="ts">
+import type { Education } from '../../types/education';
 
-// Props ----------------------------------------------------
-const props = defineProps({
-    openModal: {
-        type: Boolean,
-        required: true
-    },
-    result: {
-        type: String,
-        required: true
-    }
-})
+interface Props {
+  openModal: boolean;
+  educationOne?: Education;
+}
 
-console.log('props.add', props.result)
 // Close Modal with Emit ----------------------------------------------------
 const emit = defineEmits(["end"]);
 const closeModal = () => {
     emit("end");
 }
+
+// Props ----------------------------------------------------
+const props = defineProps<Props>()
+
 
 </script>

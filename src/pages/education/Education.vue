@@ -36,16 +36,16 @@
             <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
-                <button class="px-1 mx-1 text-green-500 border cursor-pointer">view</button>
+                <button @click="handleFindOne(items.id)" class="px-1 mx-1 text-green-500 border cursor-pointer">view</button>
                 <button @click="handleEdit(items)" class="px-1 mx-1 text-yellow-500 border cursor-pointer">edit</button>
-                <button class="px-1 mx-1 text-red-500 border cursor-pointer">delete</button>
+                <button @click="handleDelete(items.id)" class="px-1 mx-1 text-red-500 border cursor-pointer">delete</button>
             </td>
           </tr>
         </tbody>
       </table>
       <div v-if="loading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
-    <!-- EducationModal-------------------------------------------------------------------- -->
+    <!-- Add_modal-------------------------------------------------------------------- -->
     <section v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
       <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
       <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
@@ -91,7 +91,23 @@
       </form>
     </div>
   </section>
-
+  <!-- View_model --------------------------------------------------------------------------- -->
+  <section v-if="isOpenView" class="fixed inset-0 z-50 flex items-center justify-center">
+      <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+      <!-- Body ------------------------------------------------------------------------->
+      <div class="w-full flex justify-between">
+        <p v-if="editId" class="font-medium text-sm">Edit Education</p>
+        <p v-else class="font-medium text-sm">Add Education</p>
+        <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
+      </div>
+      <div v-if="validator" class="">
+          <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
+      </div>
+      <p>{{ currentEducation?.name }}</p>
+    </div>
+  </section>
+  
   </article>
 </template>
 
@@ -106,11 +122,12 @@ import { addEducation } from "../../services/educationService.ts";
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
+const isOpenView = ref<boolean>(false);
  
 
 // API -------------------------------------------------------
 const educationStore = useEducationStore();
-const { education, loading, error } = storeToRefs(useEducationStore());
+const { education, currentEducation, loading, error } = storeToRefs(useEducationStore());
 
 // Swap to Edit Modal -------------------------------------------------------
 const editId = ref<number | null>(null);
@@ -130,6 +147,7 @@ const handleEdit = (education: Education) => {
 // handleCancel -------------------------------------------------------
 const handleCancel = () => {
   isOpen.value = false;
+  isOpenView.value = false
   editId.value = null;
   previewLogo.value = "";
   form.name = "";
@@ -157,6 +175,7 @@ const handleLogo = (event: Event) => {
     previewLogo.value = URL.createObjectURL(target.files[0]);
   }
 };
+
 // ---
 const handleSumbit = async () => {
   const result = educationSchema.safeParse(form);
@@ -172,7 +191,18 @@ const handleSumbit = async () => {
     handleCancel();
   }
 };
-//
+
+// handle_delete --------------------------------------------------
+const handleDelete = async (id: number) => {
+  await educationStore.deleteEducation(id)
+}
+
+// handle_delete --------------------------------------------------
+const handleFindOne = async (id: number) => {
+  isOpenView.value = true
+  await educationStore.findOne(id)
+}
+
 // onMounted -------------------------------------------------------
 onMounted(() => {
   educationStore.LoadForm()
