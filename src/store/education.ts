@@ -18,6 +18,7 @@ export const useEducationStore = defineStore("education", {
         error: null,
     }),
     actions: {
+
         // LoadForm ------------------------------------------------
         async LoadForm() {
             this.loading = true;
@@ -31,6 +32,7 @@ export const useEducationStore = defineStore("education", {
                 this.loading = false;
             }
         },
+
         // addEducation ------------------------------------------------
         async addEducation(newEducation: EducationFrom) {
             this.loading = true;
@@ -43,7 +45,8 @@ export const useEducationStore = defineStore("education", {
                 this.loading = false;
             }
         },
-        // DeleteEducation ------------------------------------------------
+
+        // FindOne ------------------------------------------------
         async findOne(id: number){
             this.loading = true
             try {
@@ -57,6 +60,8 @@ export const useEducationStore = defineStore("education", {
                 this.loading = false
             }
         },
+        //
+
         // DeleteEducation ------------------------------------------------
         async deleteEducation(id: number) {
             this.loading = true;

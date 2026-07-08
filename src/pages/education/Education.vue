@@ -118,6 +118,7 @@ import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import { addEducation } from "../../services/educationService.ts";
+import { id } from "zod/locales";
 
 
 // Event Open Modal -------------------------------------------------------
@@ -183,6 +184,12 @@ const handleSumbit = async () => {
     validator.value = result.error.issues;
     return;
   }
+  if(editId){
+    const 
+    console.log("it has id: ",editId.value)
+    return
+  }
+  
   // const ok = window.confirm("Are you sure!!!");
   // if (!ok) return;
   const res = await addEducation(form);
