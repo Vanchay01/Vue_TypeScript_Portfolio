@@ -1,6 +1,6 @@
 <template>
   <article class="w-full flex flex-col gap-4 p-4">
-    <h1 class="font-normal text-2xl">Project Managements</h1>
+    <h1 class="font-normal text-2xl flex items-center gap-2"><img class="h-6" :src="projectIcon" alt="Project Icon">Project Managements</h1>
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Project Managements</p>
       <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add Project</button>
@@ -10,7 +10,6 @@
       :edit="isOpen"
       @close="isOpen = false"
     >
-      <p>This is adding Project page</p>
     </EducationModal>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
@@ -55,6 +54,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useWork } from '../composables/useWork';
+import projectIcon from '../../public/icons/project.png';
 
 const isOpen = ref(false)
 
