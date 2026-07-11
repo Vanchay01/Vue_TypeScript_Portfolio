@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useWork } from '../composables/useWork';
-import projectIcon from '../../public/icons/project.png';
+import projectIcon from '../icons/project.png';
 
 const isOpen = ref(false)
 

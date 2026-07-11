@@ -28,7 +28,7 @@
           <tr v-for="(items, index) in education" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img :src="`http://localhost:5002/uploads/${items.logo}`"  alt="" class="h-5"></td>
+            <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="h-5"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.major }}</td>
             <td class="p-1">{{ items.gpa }}</td>
@@ -80,14 +80,15 @@
           />
           <img
             v-else-if="editId"
-            :src="previewLogo"
+            :src="previewLogo ? previewLogo : ``"
             alt="No Image"
             className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           /> 
           <span v-else className="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
         </label>
-        <button type="submit" class="border text-blue-500 bg-blue-500/20" >Add</button>
-        <button @click="handleCancel" type="button" class="border text-yellow-500 bg-yellow-500/20" >Cancel</button>
+        <button v-if="!editId" type="submit" class="border text-blue-500 bg-blue-500/20 cursor-pointer" >Add</button>
+        <button v-if="editId" type="submit" class="border text-yellow-500 bg-yellow-500/20 cursor-pointer" >Update</button>
+        <button @click="handleCancel" type="button" class="border text-gray-500 bg-gray-500/20 cursor-pointer" >Cancel</button>
       </form>
     </div>
   </section>
@@ -117,6 +118,7 @@ import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
+import { id } from "zod/locales";
 
 
 // Event Open Modal -------------------------------------------------------
@@ -130,18 +132,18 @@ const { education, currentEducation, loading, error } = storeToRefs(useEducation
 
 // Swap to Edit Modal -------------------------------------------------------
 const editId = ref<number | null>(null);
-const previewLogo = ref<string>(""); 
+const previewLogo = ref<string | null>(""); 
+
 const handleEdit = (education: Education) => {
   isOpen.value = true;
-  previewLogo.value = education.logo ? `http://localhost:5002/uploads/${education.logo}` : "";
+  previewLogo.value = education.logo ? `http://localhost:5002/uploads/${education.logo}` : '';
   editId.value = education.id;
+
   form.name = education.name;
   form.major = education.major;
   form.gpa = education.gpa;
   form.date_start = education.date_start;
   form.date_end = education.date_end;
-  // form.logo = education.logo; 
-  
 };
 // handleCancel -------------------------------------------------------
 const handleCancel = () => {
@@ -149,6 +151,7 @@ const handleCancel = () => {
   isOpenView.value = false
   editId.value = null;
   previewLogo.value = "";
+
   form.name = "";
   form.major = "";
   form.gpa = "";
@@ -182,22 +185,26 @@ const handleSumbit = async () => {
     validator.value = result.error.issues;
     return;
   }
+  console.log(result.data)
   if(editId.value != null){
     // Edit Education turn
-    console.log("Edit ID", editId.value)
+    // console.log("Edit ID", editId.value)
+    console.log("Edit Form", form)
+    await educationStore.updateOne(editId.value, form)
+    await educationStore.LoadForm();
+    handleCancel(); 
     return
   }
+
   // const ok = window.confirm("Are you sure!!!");
   // if (!ok) return;
 
-  console.log("ss", form)
-  const res = await educationStore.create(for
-  m);
+  educationStore.create(form);
   await educationStore.LoadForm();
   handleCancel();
-
+  return
 };
-
+console.log("asdasd",editId.value)
 // handle_delete --------------------------------------------------
 const handleDelete = async (id: number) => {
   await educationStore.deleteOne(id)

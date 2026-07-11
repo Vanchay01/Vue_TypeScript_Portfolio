@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import { addEducation, deleteEducation, getEducation, getEducationById } from "../services/educationService";
-import type { Education, EducationFrom } from "../types/education";
+import { addEducation, deleteEducation, getEducation, getEducationById, updateEducation } from "../services/educationService";
+import type { Education, EducationFrom, EducationUpdate } from "../types/education";
 
 
 interface EducationState {
     education: Education[];
     currentEducation: Education | null;
+    updatedEducation: Education | null
     loading: boolean;
     error: string | null;
 }
@@ -14,6 +15,7 @@ export const useEducationStore = defineStore("education", {
     state: (): EducationState => ({
         education: [],
         currentEducation: null,
+        updatedEducation: null,
         loading: false,
         error: null,
     }),
@@ -33,10 +35,10 @@ export const useEducationStore = defineStore("education", {
         },
 
         // addEducation ------------------------------------------------
-        async create(newEducation: EducationFrom) {
+        async create(form: EducationFrom) {
             this.loading = true;
             try {
-                const response = await addEducation(newEducation);
+                const response = await addEducation(form);
                 this.education = response.data;
                 return response.data
             } catch (error: any) {
@@ -60,7 +62,21 @@ export const useEducationStore = defineStore("education", {
                 this.loading = false
             }
         },
-        //
+
+        // UpdateEducation ------------------------------------------------
+        async updateOne(id: number, form: EducationFrom){
+            this.loading = true
+            try {
+                const response = await updateEducation(id, form)
+                this.updatedEducation = response
+                await this.LoadForm()
+                return response.updatedEducation
+            } catch (error: any) {
+                this.error = error.message
+            } finally {
+                this.loading = false
+            }
+        },
 
         // DeleteEducation ------------------------------------------------
         async deleteOne(id: number) {

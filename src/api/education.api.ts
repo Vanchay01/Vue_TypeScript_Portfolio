@@ -4,8 +4,8 @@ import { apiURL } from "./apiURL";
 
 export const educationAPI = {
   // add education ----------------------------------------------------------------
-  async addEducation(fromData: FormData): Promise<apiResponse<Education[]>> {
-    const {data} =  await apiURL.post<apiResponse<Education[]>>('/education', fromData, {
+  async addEducation(form: FormData): Promise<apiResponse<Education[]>> {
+    const {data} =  await apiURL.post<apiResponse<Education[]>>('/education', form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -26,8 +26,9 @@ export const educationAPI = {
   },
 
   // update education -------------------------------------------------------------
-  async updateEducation(id: number, data: FormData) {
-    return await apiURL.patch(`/education/${id}`, data);
+  async updateEducation(id: number, form: FormData): Promise<apiResponse<Education>> {
+    const {data} = await apiURL.patch<apiResponse<Education>>(`/education/${id}`, form);
+    return data
   },
 
   // delete education -------------------------------------------------------------
