@@ -24,7 +24,6 @@ export const useEducationStore = defineStore("education", {
             this.loading = true;
             try {
                 const response = await getEducation();
-                console.log("Education data fetched:", response);
                 this.education = response.data;
             } catch (error: any) {
                 this.error = error.message || "An error occurred while fetching education data.";
@@ -34,11 +33,12 @@ export const useEducationStore = defineStore("education", {
         },
 
         // addEducation ------------------------------------------------
-        async addEducation(newEducation: EducationFrom) {
+        async create(newEducation: EducationFrom) {
             this.loading = true;
             try {
                 const response = await addEducation(newEducation);
                 this.education = response.data;
+                return response.data
             } catch (error: any) {
                 this.error = error.message || "An error occurred while fetching education data.";
             } finally {
@@ -63,7 +63,7 @@ export const useEducationStore = defineStore("education", {
         //
 
         // DeleteEducation ------------------------------------------------
-        async deleteEducation(id: number) {
+        async deleteOne(id: number) {
             this.loading = true;
             try {
                 const response = await deleteEducation(id);

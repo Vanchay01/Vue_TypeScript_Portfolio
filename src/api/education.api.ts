@@ -5,20 +5,17 @@ import { apiURL } from "./apiURL";
 export const educationAPI = {
   // add education ----------------------------------------------------------------
   async addEducation(fromData: FormData): Promise<apiResponse<Education[]>> {
-    console.log("Testing in API => FormData:", fromData);
     const {data} =  await apiURL.post<apiResponse<Education[]>>('/education', fromData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
-    console.log("DONE: ", data);
     return data;
   },
 
   // get education ----------------------------------------------------------------
   async getAll(): Promise<apiResponse<Education[]>> {
     const { data } = await apiURL.get<apiResponse<Education[]>>("/education");
-    console.log("Testing in API => getAll:", data);
     return data;
   },
 

@@ -117,7 +117,6 @@ import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
-import { addEducation } from "../../services/educationService.ts";
 
 
 // Event Open Modal -------------------------------------------------------
@@ -178,31 +177,30 @@ const handleLogo = (event: Event) => {
 
 // ---
 const handleSumbit = async () => {
-  
   const result = educationSchema.safeParse(form);
-
   if (!result.success) {
     validator.value = result.error.issues;
     return;
   }
-    console.log("it has id: ")
-  if(editId){
-    console.log("it has id: ",editId.value)
+  if(editId.value != null){
+    // Edit Education turn
+    console.log("Edit ID", editId.value)
     return
   }
-  
   // const ok = window.confirm("Are you sure!!!");
   // if (!ok) return;
-  const res = await addEducation(form);
-  if (res) {
-    await educationStore.LoadForm();
-    handleCancel();
-  }
+
+  console.log("ss", form)
+  const res = await educationStore.create(for
+  m);
+  await educationStore.LoadForm();
+  handleCancel();
+
 };
 
 // handle_delete --------------------------------------------------
 const handleDelete = async (id: number) => {
-  await educationStore.deleteEducation(id)
+  await educationStore.deleteOne(id)
 }
 
 // handle_delete --------------------------------------------------
