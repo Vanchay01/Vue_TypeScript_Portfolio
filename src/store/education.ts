@@ -6,7 +6,7 @@ import type { Education, EducationFrom, EducationUpdate } from "../types/educati
 interface EducationState {
     education: Education[];
     currentEducation: Education | null;
-    updatedEducation: Education | null
+    updatedEducation: Education[]
     loading: boolean;
     error: string | null;
 }
@@ -15,7 +15,7 @@ export const useEducationStore = defineStore("education", {
     state: (): EducationState => ({
         education: [],
         currentEducation: null,
-        updatedEducation: null,
+        updatedEducation: [],
         loading: false,
         error: null,
     }),

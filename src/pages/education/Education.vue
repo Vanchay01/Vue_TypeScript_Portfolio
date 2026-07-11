@@ -28,7 +28,7 @@
           <tr v-for="(items, index) in education" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="h-5"></td>
+            <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="m-auto size-5 rounded-full"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.major }}</td>
             <td class="p-1">{{ items.gpa }}</td>
@@ -105,7 +105,7 @@
       <div v-if="validator" class="">
           <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
       </div>
-      <p>{{ currentEducation?.name }}</p>
+      <p><img :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-5 rounded-full"> {{ currentEducation?.name }}</p>
     </div>
   </section>
   
@@ -118,8 +118,6 @@ import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
-import { id } from "zod/locales";
-
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
@@ -186,21 +184,21 @@ const handleSumbit = async () => {
     return;
   }
   console.log(result.data)
-  if(editId.value != null){
-    // Edit Education turn
-    // console.log("Edit ID", editId.value)
-    console.log("Edit Form", form)
+  if(editId.value !== null && editId.value !== undefined){
+
+    const ok = window.confirm("Do you want to update this education?.");
+    if (!ok) return;
+
     await educationStore.updateOne(editId.value, form)
-    await educationStore.LoadForm();
     handleCancel(); 
     return
   }
 
-  // const ok = window.confirm("Are you sure!!!");
-  // if (!ok) return;
+  const ok = window.confirm("Are you sure? You want to add new Education.");
+  if (!ok) return;
 
-  educationStore.create(form);
-  await educationStore.LoadForm();
+  educationStore.create(result.data);
+  // await educationStore.LoadForm();
   handleCancel();
   return
 };

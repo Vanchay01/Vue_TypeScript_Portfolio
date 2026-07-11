@@ -26,5 +26,5 @@ export interface EducationUpdate  {
     date_start: string,
     date_end:  string,
     created_at: string,
-    logo: string | null 
+    logo: File | string | null | undefined
 }
