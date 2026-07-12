@@ -9,7 +9,7 @@
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
       <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
-      <table class="min-w-full divide-y-2 divide-gray-200">
+      <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
             <th class="p-1">No.</th>
@@ -95,34 +95,44 @@
   <!-- View_model --------------------------------------------------------------------------- -->
   <section v-if="isOpenView" class="fixed inset-0 z-50 flex items-center justify-center">
     <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
-      <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+      <div class="relative z-10 w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
        <!-- header -->
       <div class="w-full flex justify-between">
-        <p v-if="editId" class="font-medium text-sm">Edit Education</p>
-        <p v-else class="font-medium text-sm">Add Education</p>
+        <p class="font-medium text-sm">View Education</p>
         <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
       <!-- body 01 -->
-      <div class="flex items-center justify-start gap-2">
-        <div><img  v-if="currentEducation?.logo" :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-16 rounded-full"></div>
-        <div>
+      <div class="flex items-center justify-start gap-2 font-medium text-sm py-4">
+        <div class="size-16 rounded-full bg-gray-200"><img  v-if="currentEducation?.logo" :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-16 rounded-full"></div>
+        <div class="flex flex-col">
           <p>Program Record ID.  {{ currentEducation?.id }}</p>
-          <h1>{{ currentEducation?.name }}</h1>
-          <p>{{ currentEducation?.major }}</p>
+          <h1 class=" font-bold text-3xl">{{ currentEducation?.name }}</h1>
+          <p><span class="text-purple-500 bg-purple-500/20 border px-2 rounded-full">{{ currentEducation?.major }}</span></p>
         </div>
       </div>
+      <hr class="text-gray-400">
       <!-- body 02-->
-       <div class=" w-full flex items-center justify-start">
+       <div class=" w-full flex justify-between font-medium text-sm gap-4 pt-4">
         <!-- time line -->
-        <div>
-          
+        <div class="w-1/2 flex flex-col justify-between items">
+          <p>Term of study</p>
+          <div class="py-2">
+            <p class="flex justify-between"><span>Date Start</span><span>Date End</span></p>
+            <hr class="text-gray-400">
+            <p class="flex justify-between"><span>{{currentEducation?.date_start}}</span><span>{{currentEducation?.date_end}}</span></p>
+            <p class="text-center"> {{ yearTerm }} </p>
+          </div>
+          <p class="text-center flex justify-center "><span class="flex flex-col font-bold text-3xl text-green-500 bg-green-500/20 border rounded-full px-7">{{currentEducation?.gpa}}<span class="font-medium text-sm text-gray-500">GPA</span></span></p>
         </div>
         <!-- Record MetaData -->
-        <div class="w-full">
-          <p class="flex justify-between"><span>Record ID</span><span></span>{{ currentEducation?.id }}</p>
-          <p class="flex justify-between"><span>Major</span><span></span>{{ currentEducation?.major }}</p>
-          <p class="flex justify-between"><span>Created at</span><span></span>{{ currentEducation?.created_at }}</p>
+        <div class="w-1/2">
+          <p class="pb-2">Record Metadata</p>
+          <div class="border rounded-xl border-gray-400">
+            <p class="flex justify-between border-b border-gray-400 p-2"><span>Record ID</span><span>{{ currentEducation?.id }}</span></p>
+            <p class="flex justify-between border-b border-gray-400 p-2"><span>Major</span><span>{{ currentEducation?.major }}</span></p>
+            <p class="flex justify-between p-2"><span>Created at</span><span>{{ currentEducation?.created_at }}</span></p>
+          </div>
         </div>
        </div>
     </div>
@@ -132,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/education.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
@@ -237,5 +247,30 @@ const handleFindOne = async (id: number) => {
 // onMounted -------------------------------------------------------
 onMounted(() => {
   educationStore.LoadForm()
+});
+
+// Count Terms  -------------------------------------------------------
+const yearTerm = computed(() => {
+  if (!currentEducation.value) return "";
+
+  const start = new Date(currentEducation.value.date_start);
+  const end = new Date(currentEducation.value.date_end);
+
+  let months =
+    (end.getFullYear() - start.getFullYear()) * 12 +
+    (end.getMonth() - start.getMonth());
+
+  if (end.getDate() < start.getDate()) {
+    months--;
+  }
+
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (remainingMonths === 0) {
+    return `${years} years`;
+  }
+
+  return `${years} years ${remainingMonths} months`;
 });
 </script>
