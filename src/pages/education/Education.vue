@@ -28,7 +28,7 @@
           <tr v-for="(items, index) in education" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="m-auto size-5 rounded-full"></td>
+            <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="size-5 rounded-full"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.major }}</td>
             <td class="p-1">{{ items.gpa }}</td>
@@ -105,7 +105,7 @@
       <div v-if="validator" class="">
           <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
       </div>
-      <p><img :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-5 rounded-full"> {{ currentEducation?.name }}</p>
+      <p><img  v-if="currentEducation?.logo" :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-5 rounded-full"> {{ currentEducation?.name }}</p>
     </div>
   </section>
   
@@ -183,7 +183,7 @@ const handleSumbit = async () => {
     validator.value = result.error.issues;
     return;
   }
-  console.log(result.data)
+  // Swap to Edit by Id
   if(editId.value !== null && editId.value !== undefined){
 
     const ok = window.confirm("Do you want to update this education?.");
@@ -197,7 +197,7 @@ const handleSumbit = async () => {
   const ok = window.confirm("Are you sure? You want to add new Education.");
   if (!ok) return;
 
-  educationStore.create(result.data);
+  await educationStore.create(form);
   // await educationStore.LoadForm();
   handleCancel();
   return

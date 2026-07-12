@@ -1,12 +1,11 @@
 import { defineStore } from "pinia";
 import { addEducation, deleteEducation, getEducation, getEducationById, updateEducation } from "../services/educationService";
-import type { Education, EducationFrom, EducationUpdate } from "../types/education";
+import type { Education, EducationFrom } from "../types/education";
 
 
 interface EducationState {
     education: Education[];
     currentEducation: Education | null;
-    updatedEducation: Education[]
     loading: boolean;
     error: string | null;
 }
@@ -15,7 +14,6 @@ export const useEducationStore = defineStore("education", {
     state: (): EducationState => ({
         education: [],
         currentEducation: null,
-        updatedEducation: [],
         loading: false,
         error: null,
     }),
@@ -39,9 +37,10 @@ export const useEducationStore = defineStore("education", {
             this.loading = true;
             try {
                 const response = await addEducation(form);
-                this.education = response.data;
+                await this.LoadForm()
                 return response.data
             } catch (error: any) {
+                console.log(error.message)
                 this.error = error.message || "An error occurred while fetching education data.";
             } finally {
                 this.loading = false;
@@ -68,9 +67,8 @@ export const useEducationStore = defineStore("education", {
             this.loading = true
             try {
                 const response = await updateEducation(id, form)
-                this.updatedEducation = response
-                await this.LoadForm()
-                return response.updatedEducation
+                // await this.LoadForm()
+                return response.data
             } catch (error: any) {
                 this.error = error.message
             } finally {

@@ -7,4 +7,5 @@ export const educationSchema = z.object({
   gpa: z.string().optional(),
   date_start: z.string().optional(),
   date_end: z.string().optional(),
+  // logo: z.file().nullish()
 });

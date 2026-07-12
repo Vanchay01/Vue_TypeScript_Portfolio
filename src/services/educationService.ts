@@ -25,7 +25,7 @@ export const getEducationById = (id: number) => {
 
 // update education ------------------------------------------------------
 export const updateEducation = (id: number, form: EducationFrom) => {
-    console.log(form)
+    console.log("Service: ",form)
     const formData = new FormData()
     Object.entries(form).forEach(([key, value]) => {
         if(value !== undefined && value !== null) {
