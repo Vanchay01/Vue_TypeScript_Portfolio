@@ -94,18 +94,37 @@
   </section>
   <!-- View_model --------------------------------------------------------------------------- -->
   <section v-if="isOpenView" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
+    <div @click="handleCancel" class="absolute inset-0 bg-black/50"></div>
       <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
+       <!-- header -->
       <div class="w-full flex justify-between">
         <p v-if="editId" class="font-medium text-sm">Edit Education</p>
         <p v-else class="font-medium text-sm">Add Education</p>
         <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
-      <div v-if="validator" class="">
-          <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
+      <!-- body 01 -->
+      <div class="flex items-center justify-start gap-2">
+        <div><img  v-if="currentEducation?.logo" :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-16 rounded-full"></div>
+        <div>
+          <p>Program Record ID.  {{ currentEducation?.id }}</p>
+          <h1>{{ currentEducation?.name }}</h1>
+          <p>{{ currentEducation?.major }}</p>
+        </div>
       </div>
-      <p><img  v-if="currentEducation?.logo" :src="`http://localhost:5002/uploads/${currentEducation?.logo}`"  alt="no" class="m-auto size-5 rounded-full"> {{ currentEducation?.name }}</p>
+      <!-- body 02-->
+       <div class=" w-full flex items-center justify-start">
+        <!-- time line -->
+        <div>
+          
+        </div>
+        <!-- Record MetaData -->
+        <div class="w-full">
+          <p class="flex justify-between"><span>Record ID</span><span></span>{{ currentEducation?.id }}</p>
+          <p class="flex justify-between"><span>Major</span><span></span>{{ currentEducation?.major }}</p>
+          <p class="flex justify-between"><span>Created at</span><span></span>{{ currentEducation?.created_at }}</p>
+        </div>
+       </div>
     </div>
   </section>
   
@@ -190,6 +209,7 @@ const handleSumbit = async () => {
     if (!ok) return;
 
     await educationStore.updateOne(editId.value, form)
+    await educationStore.LoadForm();
     handleCancel(); 
     return
   }
@@ -198,7 +218,7 @@ const handleSumbit = async () => {
   if (!ok) return;
 
   await educationStore.create(form);
-  // await educationStore.LoadForm();
+  await educationStore.LoadForm();
   handleCancel();
   return
 };
