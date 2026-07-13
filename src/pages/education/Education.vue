@@ -189,9 +189,9 @@ const handleCancel = () => {
 
 // handleSubmit -------------------------------------------------------
 const form = reactive<EducationFrom>({
-  name: "School of Information Technology",
+  name: "Svay Reing University",
   major: "Computer Science",
-  gpa: "3.5",
+  gpa: "3.49",
   date_start: "2020-09-19",
   date_end: "2024-10-19",
   logo: null,
@@ -236,6 +236,8 @@ console.log("asdasd",editId.value)
 // handle_delete --------------------------------------------------
 const handleDelete = async (id: number) => {
   await educationStore.deleteOne(id)
+  await educationStore.LoadForm();
+  console.log(id)
 }
 
 // handle_delete --------------------------------------------------
