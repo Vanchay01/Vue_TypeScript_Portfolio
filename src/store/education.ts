@@ -8,7 +8,7 @@ interface EducationState {
     currentEducation: Education | null;
     loading: boolean;
     error: string | null;
-}
+}   
 
 export const useEducationStore = defineStore("education", {
     state: (): EducationState => ({
@@ -37,7 +37,6 @@ export const useEducationStore = defineStore("education", {
             this.loading = true;
             try {
                 const response = await addEducation(form);
-                await this.LoadForm()
                 return response.data
             } catch (error: any) {
                 console.log(error.message)
@@ -67,7 +66,6 @@ export const useEducationStore = defineStore("education", {
             this.loading = true
             try {
                 const response = await updateEducation(id, form)
-                // await this.LoadForm()
                 return response.data
             } catch (error: any) {
                 this.error = error.message

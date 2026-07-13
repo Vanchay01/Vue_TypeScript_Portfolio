@@ -11,8 +11,8 @@ export const skillAPI = {
   },
 
   // find -------------------------------------------------------------------
-  async find(): Promise<apiResponse<Skill>> {
-    const {data} = await apiURL.get<apiResponse<Skill>>("/skill");
+  async find(): Promise<apiResponse<Skill[]>> {
+    const {data} = await apiURL.get<apiResponse<Skill[]>>("/skill");
     return data
   },
 
