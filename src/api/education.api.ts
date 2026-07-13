@@ -4,8 +4,8 @@ import { apiURL } from "./apiURL";
 
 export const educationAPI = {
   // add education ----------------------------------------------------------------
-  async addEducation(form: FormData): Promise<apiResponse<Education[]>> {
-    const {data} =  await apiURL.post<apiResponse<Education[]>>('/education', form, {
+  async addEducation(form: FormData): Promise<apiResponse<Education>> {
+    const {data} =  await apiURL.post<apiResponse<Education>>('/education', form, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

@@ -1,14 +1,14 @@
 <template>
   <article class="w-full flex flex-col gap-4 p-4">
-    <h1 class="font-normal text-2xl">Education Management</h1>
+    <h1 class="font-normal text-2xl">Skill Management</h1>
     <div class="w-full flex justify-between border p-1">
-      <p class="font-normal text-sm">Education Management</p>
-      <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
+      <p class="font-normal text-sm">Skill Management</p>
+      <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add new skill</button>
     </div>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
-      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
+      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Skill Is Empty!!!.</div>
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
@@ -16,10 +16,7 @@
             <th class="p-1">Id</th>
             <th class="p-1">Logo</th>
             <th class="p-1">Name</th>
-            <th class="p-1">Major</th>
-            <th class="p-1">GPA</th>
-            <th class="p-1">Date_Start</th>
-            <th class="p-1">Date_End</th>
+            <th class="p-1">Rating</th>
             <th class="p-1">Created_at</th>
             <th class="p-1">action</th>
           </tr>
@@ -31,9 +28,6 @@
             <td class="p-1"><img v-if="items.logo" :src="`http://localhost:5002/uploads/${items.logo}`"  alt="no" class="size-5 rounded-full"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.major }}</td>
-            <td class="p-1">{{ items.gpa }}</td>
-            <td class="p-1">{{ items.date_start }}</td>
-            <td class="p-1">{{ items.date_end }}</td>
             <td class="p-1">{{ items.created_at }}</td>
             <td class="p-1 w-40">
                 <button @click="handleFindOne(items.id)" class="px-1 mx-1 text-green-500 border cursor-pointer">view</button>

@@ -1,19 +1,36 @@
+import type { apiResponse } from "../types/apiResponse";
+import type { Skill } from "../types/skill";
 import { apiURL } from "./apiURL";
 
 export const skillAPI = {
-  addSkill(data: FormData) {
-    return apiURL.post("/skill", data);
+
+  // create -------------------------------------------------------------------
+  async create(form: FormData): Promise<apiResponse<Skill>> {
+    const {data} = await apiURL.post<apiResponse<Skill>>("/skill", form);
+    return data
   },
-  getSkill() {
-    return apiURL.get("/skill");
+
+  // find -------------------------------------------------------------------
+  async find(): Promise<apiResponse<Skill>> {
+    const {data} = await apiURL.get<apiResponse<Skill>>("/skill");
+    return data
   },
-  getSkillByID(id: number) {
-    return apiURL.get(`/skill${id}`);
+
+  // findOne -------------------------------------------------------------------
+  async findOne(id: number): Promise<apiResponse<Skill>>  {
+    const {data} = await apiURL.get<apiResponse<Skill>>(`/skill${id}`);
+    return data
   },
-  updateSkill(id: number, data: FormData) {
-    return apiURL.patch(`/skill/${id}`, data);
+
+  // updateOne -------------------------------------------------------------------
+  async updateOne(id: number, form: FormData): Promise<apiResponse<Skill>>  {
+    const {data} = await apiURL.patch<apiResponse<Skill>>(`/skill/${id}`, form);
+    return data
   },
-  deleteSkill(id: number) {
-    return apiURL.delete(`/skill${id}`);
+
+  // deleteOne -------------------------------------------------------------------
+  async deleteOne(id: number): Promise<apiResponse<Skill>>  {
+    const {data} = await apiURL.delete<apiResponse<Skill>> (`/skill${id}`);
+    return data
   },
 };
