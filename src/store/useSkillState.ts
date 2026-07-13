@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import type { Skill, skillFrom } from "../types/skill";
-import { boolean } from "zod";
 import { skillService } from "../services/skillService";
 
 interface SkillState{
@@ -10,7 +9,7 @@ interface SkillState{
     currentSkill: Skill | null
 }
 
-export const useSkill = defineStore("skill", {
+export const useSkillState = defineStore("skill", {
     state: (): SkillState => ({
         loading: false,
         error: null,
@@ -37,8 +36,10 @@ export const useSkill = defineStore("skill", {
             this.loading = true
             try {   
                 const response = await skillService.create(form)
+                console.log("ok useSkill", response.data)
                 return response.data
             } catch (error: any) {
+                console.log(error.message)
                 this.error = error.message
             } finally {
                 this.loading = false

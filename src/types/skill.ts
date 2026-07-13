@@ -9,6 +9,6 @@ export interface Skill {
 
 export interface skillFrom{
     name: string,
-    logo_url: string,
     rating: number,
+    logo_url: string,
 }

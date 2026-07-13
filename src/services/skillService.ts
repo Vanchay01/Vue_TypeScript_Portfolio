@@ -6,12 +6,15 @@ export const skillService = {
 
   // create -------------------------------------------------------
   create(form: skillFrom){
+    console.log("sad")
+    console.log(form)
     const formData = new FormData()
     Object.entries(form).forEach(([key, value]) => {
       if(value !== undefined && value !== null){
         formData.append(key, value as any)
       }
     })
+    console.log(formData)
     return skillAPI.create(formData)
   },
 

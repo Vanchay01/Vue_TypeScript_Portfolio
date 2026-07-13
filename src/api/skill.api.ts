@@ -6,7 +6,12 @@ export const skillAPI = {
 
   // create -------------------------------------------------------------------
   async create(form: FormData): Promise<apiResponse<Skill>> {
-    const {data} = await apiURL.post<apiResponse<Skill>>("/skill", form);
+    const {data} = await apiURL.post<apiResponse<Skill>>("/skill", form, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(data)
     return data
   },
 
