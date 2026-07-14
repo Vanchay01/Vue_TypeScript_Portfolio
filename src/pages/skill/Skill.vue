@@ -25,7 +25,7 @@
           <tr v-for="(items, index) in skill" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
             <td class="p-1">{{ items.id }}</td>
-            <td class="p-1"><img v-if="items.logo_url" :src="`${items.logo_url}`"  alt="no" class="size-5 rounded-full"></td>
+            <td class="p-1"><img v-if="items.logo_url" :src="`${items.logo_url}`"  alt="no" class="h-5 rounded-full"></td>
             <td class="p-1">{{ items.name }}</td>
             <td class="p-1">{{ items.rating }}</td>
             <td class="p-1">{{ items.created_at }}</td>
@@ -45,8 +45,8 @@
       <div class="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
       <!-- Body ------------------------------------------------------------------------->
       <div class="w-full flex justify-between">
-        <p v-if="editId" class="font-medium text-sm">Edit Education</p>
-        <p v-else class="font-medium text-sm">Add Education</p>
+        <p v-if="editId" class="font-medium text-sm text-yellow-500 bg-yellow-500/20 border px-2 rounded-full">Edit Education</p>
+        <p v-else class="font-medium text-sm text-blue-500 bg-blue-500/20 border px-2 rounded-full">Add Education</p>
         <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
       <div v-if="validator" class="">
@@ -54,11 +54,27 @@
       </div>
       <form action="" @submit.prevent="handleSumbit" class="flex flex-col gap-1">
         <label for="nameId">Name</label>
-        <input type="text" v-model="form.name" class="border" />
-        <label for="ratingId">Rating</label>
-        <input type="number" v-model="form.rating" class="border" />
-        <label for="logoId">Logo</label>
-        <input type="text" v-model="form.logo_url" class="border" />
+        <select v-model="form.name" @change="handleSkillChange" class="border py-1">
+          <option value="" v-if="!editId" >Select a skill</option>
+          <option :value="form.name" >{{form.name}}</option>
+          <option v-for="(skill, index) in skillOption" :key="index" :value="skill.name">{{ skill.name }}</option>
+        </select>
+        <label for="nameId">Rating</label>
+        <select v-model="form.rating" class="border py-1">
+          <option value="" v-if="!editId" disabled>0</option>
+          <option :value="form.rating" v-if="editId" >{{form.rating}} %</option>
+          <option v-for="(rating, index) in ratingOption" :key="index" :value="rating">{{ rating }} %</option>
+        </select>
+         <label for="ratingId">Logo</label>
+        <div for="logoId" className="border border-[#22223A] bg-gray-500/5 p-4 rounded-md border-dashed flex flex-col justify-center items-center">
+          <img   
+            v-if="form.logo_url"
+            :src="form.logo_url"
+            alt="No Image"
+            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+          />
+           <p v-if="!form.logo_url" class="text-[#66668A] text-[13px] font-bold py-3" >No Preview</p>
+        </div>
         <button v-if="!editId" type="submit" class="border text-blue-500 bg-blue-500/20 cursor-pointer" >Add</button>
         <button v-if="editId" type="submit" class="border text-yellow-500 bg-yellow-500/20 cursor-pointer" >Update</button>
         <button @click="handleCancel" type="button" class="border text-gray-500 bg-gray-500/20 cursor-pointer" >Cancel</button>
@@ -72,39 +88,28 @@
       <!-- Body ------------------------------------------------------------------------->
        <!-- header -->
       <div class="w-full flex justify-between">
-        <p class="font-medium text-sm">View Education</p>
+        <p class="font-medium text-sm text-green-500 bg-green-500/20 border px-2 rounded-full">View a skill</p>
         <button @click="handleCancel" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">X</button>
       </div>
       <!-- body 01 -->
       <div class="flex items-center justify-start gap-2 font-medium text-sm py-4">
-        <div class="size-16 rounded-full bg-gray-200"><img  v-if="currentSkill?.logo_url" :src="`${currentSkill?.logo_url}`"  alt="no" class="m-auto size-16 rounded-full"></div>
+        <div class="h-16"><img  v-if="currentSkill?.logo_url" :src="`${currentSkill?.logo_url}`"  alt="no" class="m-auto h-16 "></div>
         <div class="flex flex-col">
           <p>Program Record ID.  {{ currentSkill?.id }}</p>
           <h1 class=" font-bold text-3xl">{{ currentSkill?.name }}</h1>
-          <!-- <p><span class="text-purple-500 bg-purple-500/20 border px-2 rounded-full">{{ currentSkill?.major }}</span></p> -->
+          <p><span class="text-purple-500 bg-purple-500/20 border px-2 rounded-full">GPA {{ currentSkill?.rating}} %</span></p>
         </div>
       </div>
       <hr class="text-gray-400">
       <!-- body 02-->
        <div class=" w-full flex justify-between font-medium text-sm gap-4 pt-4">
-        <!-- time line -->
-        <div class="w-1/2 flex flex-col justify-between items">
-          <p>Term of study</p>
-          <div class="py-2">
-            <p class="flex justify-between"><span>Date Start</span><span>Date End</span></p>
-            <hr class="text-gray-400">
-            <!-- <p class="flex justify-between"><span>{{currentSkill?.date_start}}</span><span>{{currentSkill?.date_end}}</span></p> -->
-            <!-- <p class="text-center"> {{ yearTerm }} </p> -->
-          </div>
-          <!-- <p class="text-center flex justify-center "><span class="flex flex-col font-bold text-3xl text-green-500 bg-green-500/20 border rounded-full px-7">{{currentEducation?.gpa}}<span class="font-medium text-sm text-gray-500">GPA</span></span></p> -->
-        </div>
         <!-- Record MetaData -->
-        <div class="w-1/2">
+        <div class="w-full">
           <p class="pb-2">Record Metadata</p>
           <div class="border rounded-xl border-gray-400">
             <p class="flex justify-between border-b border-gray-400 p-2"><span>Record ID</span><span>{{ currentSkill?.id }}</span></p>
-            <!-- <p class="flex justify-between border-b border-gray-400 p-2"><span>Major</span><span>{{ currentSkill?.major }}</span></p>
-            <p class="flex justify-between p-2"><span>Created at</span><span>{{ currentSkill?.created_at }}</span></p> -->
+            <p class="flex justify-between border-b border-gray-400 p-2"><span>GPA</span><span>{{ currentSkill?.rating }} %</span></p>
+            <p class="flex justify-between p-2"><span>Created at</span><span>{{ currentSkill?.created_at }}</span></p>
           </div>
         </div>
        </div>
@@ -120,10 +125,28 @@ import { storeToRefs } from "pinia";
 import { useSkillState } from "../../store/useSkillState.ts";
 import type { Skill, skillFrom } from "../../types/skill.ts";
 
+// JSON SKILL Option ----------------------------------------------------------
+const skillOption = [
+  {name: "React.js", logo: "https://explore-feed.github.com/topics/react/react.png"},
+  {name: "Node.js", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2u7IvnmBKp74I_WfxKvWPekm1LaofWO_wU8sDOuw41g&s=10"},
+  {name: "Vue.js", logo: "https://avatars.githubusercontent.com/u/6128107?s=200&v=4"},
+  {name: "Express.js", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP46CpCUJFglJg8KwkaFgkXfzp8TFSaMl5q_DRJK5gnw&s=10"},
+  {name: "Tailwind SCC", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX9fZzRj7BuQAtuf6RSuqIjWEaai2Vl7sFq2Y6tKq5hA&s"},
+  {name: "TypeScript", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDqK8Z2GePLjD4yUzFQInkEyz6Yr_c96ej24CcA72VnQ&s=10"},
+  {name: "JavaScript", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/960px-JavaScript-logo.png"},
+]
+// JSON Ratinh Option ----------------------------------------------------------
+const ratingOption = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
+
+// handleSkillChange ----------------------------------------------------------
+const handleSkillChange = () => {
+  const seleted = skillOption.find((s) => s.name === form.name)
+  if(seleted) {form.logo_url = seleted.logo}
+}
+
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
 const isOpenView = ref<boolean>(false);
- 
 
 // API -------------------------------------------------------
 const skillStore = useSkillState();
@@ -133,7 +156,7 @@ const { skill, currentSkill, loading, error } = storeToRefs(useSkillState());
 const editId = ref<number | null>(null);
 const previewLogo = ref<string | null>(""); 
 
-  
+// handleEdit -------------------------------------------------------
 const handleEdit = (skill: Skill) => {
   isOpen.value = true;
   previewLogo.value = skill.logo_url
@@ -142,6 +165,7 @@ const handleEdit = (skill: Skill) => {
   form.rating = skill.rating;
   form.logo_url = skill.logo_url;
 };
+
 // handleCancel -------------------------------------------------------
 const handleCancel = () => {
   isOpen.value = false;
@@ -150,7 +174,7 @@ const handleCancel = () => {
   previewLogo.value = "";
 
   form.name = "";
-  form.rating = 0;
+  form.rating = "";
   form.logo_url = "";
 };
 
@@ -162,18 +186,19 @@ const handleCancel = () => {
 // });
 const form = reactive<skillFrom>({
   name: "",
-  rating: 0,
+  rating: "",
   logo_url: "",
 });
 const validator = ref<{ message: string }[]>([]);
 // ---
 const handleSumbit = async () => {
+  console.log(form)
   // Swap to Edit by Id
   if(editId.value !== null && editId.value !== undefined){
 
     // const ok = window.confirm("Do you want to update this education?.");
-    // if (!ok) return;
-    console.log("asdasdasdassdadsdasdasdasdasdasd:",form)
+    // if (!ok) return; 
+
     await skillStore.updateOne(editId.value, form)
     await skillStore.loadForm();
     handleCancel(); 
@@ -186,8 +211,8 @@ const handleSumbit = async () => {
 };
 // handle_delete --------------------------------------------------
 const handleDelete = async (id: number) => {
-  const ok = window.confirm("Are you sure? You want to delete this education.");
-  if (!ok) return;
+  // const ok = window.confirm("Are you sure? You want to delete this education.");
+  // if (!ok) return;
   await skillStore.deleteOne(id)
   await skillStore.loadForm();
   console.log(id)

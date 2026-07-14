@@ -27,6 +27,7 @@ export const educationAPI = {
 
   // update education -------------------------------------------------------------
   async updateEducation(id: number, form: FormData): Promise<apiResponse<Education>> {
+    console.log("education.api",form)
     const {data} = await apiURL.patch<apiResponse<Education>>(`/education/${id}`, form);
     return data
   },

@@ -32,7 +32,8 @@ export const updateEducation = (id: number, form: EducationFrom) => {
             formData.append(key, value as any)
         }
     })
-
+    console.log("Inside Edit", );
+    console.log("Service updateOne converted to FormUpdate: ",formData)
     return educationAPI.updateEducation(id, formData)
 }
 

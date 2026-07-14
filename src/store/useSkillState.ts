@@ -50,6 +50,7 @@ export const useSkillState = defineStore("skill", {
         async findOne(id: number){
             this.loading = true
             try {   
+                console.log("ok")
                 const response = await skillService.findOne(id)
                 this.currentSkill = response.data
                 return response.data

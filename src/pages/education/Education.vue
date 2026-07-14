@@ -213,20 +213,22 @@ const handleSumbit = async () => {
     validator.value = result.error.issues;
     return;
   }
+  console.log("outSide Edit:", JSON.parse(JSON.stringify(form)));
+
   // Swap to Edit by Id
   if(editId.value !== null && editId.value !== undefined){
 
-    const ok = window.confirm("Do you want to update this education?.");
-    if (!ok) return;
-
+    // const ok = window.confirm("Do you want to update this education?.");
+    // if (!ok) return;
+    console.log("Inside Edit", JSON.parse(JSON.stringify(form)));
     await educationStore.updateOne(editId.value, form)
     await educationStore.LoadForm();
     handleCancel(); 
     return
   }
 
-  const ok = window.confirm("Are you sure? You want to add new Education.");
-  if (!ok) return;
+  // const ok = window.confirm("Are you sure? You want to add new Education.");
+  // if (!ok) return;
 
   await educationStore.create(form);
   await educationStore.LoadForm();

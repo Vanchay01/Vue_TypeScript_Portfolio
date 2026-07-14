@@ -63,6 +63,7 @@ export const useEducationStore = defineStore("education", {
 
         // UpdateEducation ------------------------------------------------
         async updateOne(id: number, form: EducationFrom){
+            console.log("useEducation on updateOne:", form)
             this.loading = true
             try {
                 const response = await updateEducation(id, form)

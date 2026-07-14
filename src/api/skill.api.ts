@@ -23,19 +23,24 @@ export const skillAPI = {
 
   // findOne -------------------------------------------------------------------
   async findOne(id: number): Promise<apiResponse<Skill>>  {
-    const {data} = await apiURL.get<apiResponse<Skill>>(`/skill${id}`);
+    const {data} = await apiURL.get<apiResponse<Skill>>(`/skill/${id}`);
     return data
   },
 
   // updateOne -------------------------------------------------------------------
   async updateOne(id: number, form: FormData): Promise<apiResponse<Skill>>  {
-    const {data} = await apiURL.patch<apiResponse<Skill>>(`/skill/${id}`, form);
+    console.log("skill.api",form)
+    const {data} = await apiURL.patch<apiResponse<Skill>>(`/skill/${id}`, form, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return data
   },
 
   // deleteOne -------------------------------------------------------------------
   async deleteOne(id: number): Promise<apiResponse<Skill>>  {
-    const {data} = await apiURL.delete<apiResponse<Skill>> (`/skill${id}`);
+    const {data} = await apiURL.delete<apiResponse<Skill>> (`/skill/${id}`);
     return data
   },
 };

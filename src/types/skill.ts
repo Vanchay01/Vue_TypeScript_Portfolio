@@ -3,12 +3,12 @@ export interface Skill {
     id:  number,
     name: string,
     logo_url: string,
-    rating: number,
+    rating: string,
     created_at: string
 }
 
 export interface skillFrom{
     name: string,
-    rating: number,
+    rating: string,
     logo_url: string,
 }

@@ -30,12 +30,14 @@ export const skillService = {
 
   // update one -------------------------------------------------------
   updateOne(id: number, form: skillFrom){
+    console.log("skillService 1-----",form)
     const formData = new FormData()
     Object.entries(form).forEach(([key, value]) => {
       if(value !== undefined && value !== null){
         formData.append(key, value as any)
       }
     })
+    console.log("skillService FormData",formData)
     return skillAPI.updateOne(id, formData)
   },
 
