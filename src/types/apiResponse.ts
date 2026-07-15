@@ -15,3 +15,9 @@ export interface ResponsePagination<T>{
     }
     data: T
 }
+
+export interface QueryParams{
+    page?: number,
+    limit?: number,
+    search?: string
+}

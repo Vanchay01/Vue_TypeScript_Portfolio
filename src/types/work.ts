@@ -9,11 +9,11 @@ export interface Work{
     description: string,
     created_at: string,
 }
-export interface WorkFormData{
+export interface WorkForm{
     name: string,
     position: string,
-    github: string,
-    demo: string,
     framework: string,
     description: string,
+    github: string,
+    demo: string,
 }
