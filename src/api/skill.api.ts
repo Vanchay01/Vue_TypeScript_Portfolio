@@ -6,6 +6,7 @@ export const skillAPI = {
 
   // create -------------------------------------------------------------------
   async create(form: FormData): Promise<apiResponse<Skill>> {
+    console.log("ok")
     const {data} = await apiURL.post<apiResponse<Skill>>("/skill", form, {
       headers: {
         'Content-Type': 'application/json'
@@ -24,6 +25,7 @@ export const skillAPI = {
   // findOne -------------------------------------------------------------------
   async findOne(id: number): Promise<apiResponse<Skill>>  {
     const {data} = await apiURL.get<apiResponse<Skill>>(`/skill/${id}`);
+    console.log(data.data.logo_url)
     return data
   },
 
