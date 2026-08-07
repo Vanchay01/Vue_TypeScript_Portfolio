@@ -17,7 +17,7 @@
 import { ref } from 'vue';
 import Child from './Child.vue';
 import { storeToRefs } from 'pinia';
-import { useEducationStore } from '../../store/education.ts';
+import { useEducationStore } from '../../store/useEducationStore.ts';
 import type { Education } from '../../types/education.ts';
 
 // call EducationStore ----------------------------

@@ -7,7 +7,7 @@
     </div>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
+      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
       <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
@@ -43,7 +43,7 @@
           </tr>
         </tbody>
       </table>
-      <div v-if="loading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <!-- Add_modal-------------------------------------------------------------------- -->
     <section v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
@@ -71,20 +71,20 @@
         <input type="date" v-model="form.date_end" class="border" />
         <label for="logoId">Logo</label>
         <input id="logoId" type="file" @change="handleLogo" class="hidden" /><br />
-        <label for="logoId" className="border border-[#22223A] bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer"> 
+        <label for="logoId" class="border border-[#22223A] bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">
           <img   
             v-if="previewLogo"
             :src="previewLogo"
             alt="No Image"
-            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           />
           <img
             v-else-if="editId"
             :src="previewLogo ? previewLogo : ``"
             alt="No Image"
-            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           /> 
-          <span v-else className="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
+          <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center">Click to upload</span>
         </label>
         <button v-if="!editId" type="submit" class="border text-blue-500 bg-blue-500/20 cursor-pointer" >Add</button>
         <button v-if="editId" type="submit" class="border text-yellow-500 bg-yellow-500/20 cursor-pointer" >Update</button>
@@ -144,7 +144,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { useEducationStore } from "../../store/education.ts";
+import { useEducationStore } from "../../store/useEducationStore.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 
@@ -155,7 +155,7 @@ const isOpenView = ref<boolean>(false);
 
 // API -------------------------------------------------------
 const educationStore = useEducationStore();
-const { education, currentEducation, loading, error } = storeToRefs(useEducationStore());
+const { education, currentEducation, isLoading, isError } = storeToRefs(useEducationStore());
 
 // Swap to Edit Modal -------------------------------------------------------
 const editId = ref<number | null>(null);
@@ -215,7 +215,7 @@ const handleSumbit = async () => {
   }
   console.log("outSide Edit:", JSON.parse(JSON.stringify(form)));
 
-  // Swap to Edit by Id
+  // Swap to Edit by id
   if(editId.value !== null && editId.value !== undefined){
 
     // const ok = window.confirm("Do you want to update this education?.");
