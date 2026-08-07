@@ -22,7 +22,7 @@
     
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
+      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
       <div v-else-if="work.data.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Project is empty!!!.</div>
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
@@ -39,7 +39,7 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
-        <LoadingForm v-if="loading = true"/>
+        <LoadingForm v-if="isLoading = true"/>
         <tbody v-if="work" class="divide-y divide-gray-200">
           <tr v-for="(items, index) in work.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
@@ -62,7 +62,7 @@
       </table>
       <div>
     </div>
-      <div v-if="loading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <div class="">
       <button 
@@ -94,7 +94,7 @@
       <div v-if="validator" class="">
           <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
       </div>
-      <form action="" @submit.prevent="handleSumbit" class="flex flex-col gap-1">
+      <form action="" @submit.prevent="handleSubmit" class="flex flex-col gap-1">
         <label for="nameId">Name</label>
         <input type="text" v-model="form.name" class="border" />
         <label for="nameId">position</label>
@@ -154,7 +154,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useWorkStore } from "../../store/useWork.ts";
+import { useWorkStore } from "../../store/useWorkStore.ts";
 import type { Work, WorkForm } from "../../types/work.ts";
 import LoadingForm from "../../components/LoadingForm.vue";
 
@@ -165,7 +165,7 @@ const editId = ref<number | null>(null);
 const previewLogo = ref<string | null>(""); 
 const validator = ref<{ message: string }[]>([]);
 const workStore = useWorkStore();
-const { work, currentWork, loading, error} = storeToRefs(useWorkStore());
+const { work, currentWork, isLoading, isError} = storeToRefs(useWorkStore());
 const searchInput = ref("")
 let debounceTimer: ReturnType<typeof setTimeout>
 const form = reactive<WorkForm>({
@@ -181,7 +181,7 @@ const form = reactive<WorkForm>({
 //   position: "",
 //   framework: "", 
 //   description: "", 
-//   github: "", 
+//   GitHub: "",
 //   demo: "", 
 // });
 
@@ -234,7 +234,7 @@ function clearSearch() {
 
 
 // create and update --------------------------------------------------
-const handleSumbit = async () => {
+const handleSubmit = async () => {
   if(editId.value !== null && editId.value !== undefined){
     await workStore.updateOne(editId.value, form)
     await workStore.loadForm();

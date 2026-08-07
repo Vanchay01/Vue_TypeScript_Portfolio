@@ -4,8 +4,8 @@ import { workService } from "../services/workService";
 import type { ResponsePagination } from "../types/apiResponse";
 
 interface WorkState {
-    loading: boolean,
-    error: string | null,
+    isLoading: boolean,
+    isError: string | null,
     work: ResponsePagination<Work[]> ,
     currentWork: Work | null
     search: string 
@@ -13,8 +13,8 @@ interface WorkState {
 
 export const useWorkStore = defineStore("work", {
     state: (): WorkState => ({
-        loading: false,
-        error: null,
+        isLoading: false,
+        isError: null,
         work: {
             pagination: { total: 0, page: 0, limit: 0, totalPage: 0},
             data: []
@@ -24,8 +24,8 @@ export const useWorkStore = defineStore("work", {
     }),
     actions: {
         async loadForm() {
-            this.loading = true
             try {
+                this.isLoading = true
                 console.log({page: this.work.pagination.page, limit: this.work.pagination.limit})
                 const response = await workService.find({
                     page: this.work.pagination.page,
@@ -34,92 +34,92 @@ export const useWorkStore = defineStore("work", {
                 })
                 this.work = response.data
             } catch (error: any) {
-                this.error = error.message 
+                this.isError = error.message
             } finally {
-                this.loading = false
+                this.isLoading = false
             }
         },
 
         // create one ------------------------------------------------------------------
         async create(form: WorkForm){
-            this.loading = true
-            try {   
+            try {
+                this.isLoading = true
                 const response = await workService.create(form)
                 console.log("ok useSkill", response.data)
                 return response.data
             } catch (error: any) {
                 console.log(error.message)
-                this.error = error.message
+                this.isError = error.message
             } finally {
-                this.loading = false
+                this.isLoading = false
             }
         },
 
         // find one ------------------------------------------------------------------
         async findOne(id: number){
-            this.loading = true
-            try {   
+            try {
+                this.isLoading = true
                 console.log("ok")
                 const response = await workService.findOne(id)
                 this.currentWork = response.data
                 return response.data
             } catch (error: any) {
-                this.error = error.message
+                this.isError = error.message
             } finally {
-                this.loading = false
+                this.isLoading = false
             }
         },
 
         // update one ------------------------------------------------------------------
         async updateOne(id: number, form: WorkForm){
-            this.loading = true
-            try {   
+            try {
+                this.isLoading = true
                 const response = await workService.updateOne(id, form)
                 return response.data
             } catch (error: any) {
-                this.error = error.message
+                this.isError = error.message
             } finally {
-                this.loading = false
+                this.isLoading = false
             }
         },
 
         // delete one ------------------------------------------------------------------
         async deleteOne(id: number){
-            this.loading = true
-            try {   
+            try {
+                this.isLoading = true
                 const response = await workService.deleteOne(id)
                 return response.data
             } catch (error: any) {
-                this.error = error.message
+                this.isError = error.message
             } finally {
-                this.loading = false
+                this.isLoading = false
             }
         },
 
 
         // ...existing actions
 
-        setPage(page: number) {
+        async setPage(page: number) {
             this.work.pagination.page = page
-            this.loadForm() // re-fetch immediately with new page
+            await this.loadForm() // re-fetch immediately with new page
         },
 
-        setLimit(limit: number) {
+        async setLimit(limit: number) {
             this.work.pagination.limit = limit
             this.work.pagination.page = 1 // reset to page 1 — changing page size mid-list is confusing otherwise
-            this.loadForm()
+            await this.loadForm()
         },
 
-        setSearch(value: string) {
+        async setSearch(value: string) {
             this.search = value
             this.work.pagination.page = 1
-            this.loadForm()
+            await this.loadForm()
         },
 
-            clearSearch() {
+        async clearSearch() {
             this.search = ""
             this.work.pagination.page = 1
-            this.loadForm()
+            await this.loadForm()
         },
     }
 })
