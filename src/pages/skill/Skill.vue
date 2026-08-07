@@ -7,7 +7,7 @@
     </div>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="error" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ error }}</div>
+      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
       <div v-else-if="skill.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Skill Is Empty!!!.</div>
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
@@ -37,7 +37,7 @@
           </tr>
         </tbody>
       </table>
-      <div v-if="loading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <!-- Add_modal-------------------------------------------------------------------- -->
     <section v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
@@ -66,12 +66,12 @@
           <option v-for="(rating, index) in ratingOption" :key="index" :value="rating">{{ rating }} %</option>
         </select>
          <label for="ratingId">Logo</label>
-        <div for="logoId" className="border border-[#22223A] bg-gray-500/5 p-4 rounded-md border-dashed flex flex-col justify-center items-center">
+        <div for="logoId" class="border border-[#22223A] bg-gray-500/5 p-4 rounded-md border-dashed flex flex-col justify-center items-center">
           <img   
             v-if="form.logo_url"
             :src="form.logo_url"
             alt="No Image"
-            className="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
           />
            <p v-if="!form.logo_url" class="text-[#66668A] text-[13px] font-bold py-3" >No Preview</p>
         </div>
@@ -122,7 +122,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { useSkillState } from "../../store/useSkillState.ts";
+import { useSkillStore } from "../../store/useSkillStore.ts";
 import type { Skill, skillFrom } from "../../types/skill.ts";
 
 // JSON SKILL Option ----------------------------------------------------------
@@ -135,7 +135,7 @@ const skillOption = [
   {name: "TypeScript", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDqK8Z2GePLjD4yUzFQInkEyz6Yr_c96ej24CcA72VnQ&s=10"},
   {name: "JavaScript", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/JavaScript-logo.png/960px-JavaScript-logo.png"},
 ]
-// JSON Ratinh Option ----------------------------------------------------------
+// JSON Rating Option ----------------------------------------------------------
 const ratingOption = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100]
 
 // handleSkillChange ----------------------------------------------------------
@@ -149,8 +149,8 @@ const isOpen = ref<boolean>(false);
 const isOpenView = ref<boolean>(false);
 
 // API -------------------------------------------------------
-const skillStore = useSkillState();
-const { skill, currentSkill, loading, error } = storeToRefs(useSkillState());
+const skillStore = useSkillStore();
+const { skill, currentSkill, isLoading, isError } = storeToRefs(useSkillStore());
 
 // Swap to Edit Modal -------------------------------------------------------
 const editId = ref<number | null>(null);
@@ -193,7 +193,7 @@ const validator = ref<{ message: string }[]>([]);
 // ---
 const handleSumbit = async () => {
   console.log(form)
-  // Swap to Edit by Id
+  // Swap to Edit by id
   if(editId.value !== null && editId.value !== undefined){
 
     // const ok = window.confirm("Do you want to update this education?.");
