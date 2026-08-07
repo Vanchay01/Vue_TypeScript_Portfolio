@@ -39,7 +39,7 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
-        <LoadingForm v-if="isLoading = true"/>
+        <LoadingForm v-if="isLoadings = true"/>
         <tbody v-if="work" class="divide-y divide-gray-200">
           <tr v-for="(items, index) in work.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
@@ -62,7 +62,7 @@
       </table>
       <div>
     </div>
-      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <div v-if="isLoadings" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <div class="">
       <button 
@@ -165,7 +165,7 @@ const editId = ref<number | null>(null);
 const previewLogo = ref<string | null>(""); 
 const validator = ref<{ message: string }[]>([]);
 const workStore = useWorkStore();
-const { work, currentWork, isLoading, isError} = storeToRefs(useWorkStore());
+const { work, currentWork, isLoadings, isError} = storeToRefs(useWorkStore());
 const searchInput = ref("")
 let debounceTimer: ReturnType<typeof setTimeout>
 const form = reactive<WorkForm>({
@@ -260,8 +260,8 @@ const handleDelete = async (id: number) => {
 }
 
 // onMounted -------------------------------------------------------
-onMounted(() => {
-  workStore.loadForm()
+onMounted( async () => {
+  await workStore.loadForm()
 });
 
 

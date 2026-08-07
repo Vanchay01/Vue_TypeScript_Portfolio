@@ -58,7 +58,7 @@
       <div v-if="validator" class="">
           <div v-for="(validate, index) in validator" :key="index" class="text-center flex justify-start"><p class="border rounded-full px-1 font-normal text-sm my-1 text-yellow-500 bg-amber-500/10">{{ validate.message }}</p></div>
       </div>
-      <form action="" @submit.prevent="handleSumbit" class="flex flex-col gap-1">
+      <form action="" @submit.prevent="handleSubmit" class="flex flex-col gap-1">
         <label for="nameId">Name</label>
         <input type="text" v-model="form.name" class="border" />
         <label for="majorId">Major</label>
@@ -207,7 +207,7 @@ const handleLogo = (event: Event) => {
 };
 
 // ---
-const handleSumbit = async () => {
+const handleSubmit = async () => {
   const result = educationSchema.safeParse(form);
   if (!result.success) {
     validator.value = result.error.issues;
