@@ -4,7 +4,7 @@ import { workService } from "../services/workService";
 import type { ResponsePagination } from "../types/apiResponse";
 
 interface WorkState {
-    isLoadings: boolean,
+    isLoading: boolean,
     isError: string | null,
     work: ResponsePagination<Work[]> ,
     currentWork: Work | null
@@ -13,7 +13,7 @@ interface WorkState {
 
 export const useWorkStore = defineStore("work", {
     state: (): WorkState => ({
-        isLoadings: false,
+        isLoading: false,
         isError: null,
         work: {
             pagination: { total: 0, page: 0, limit: 0, totalPage: 0},
@@ -25,7 +25,7 @@ export const useWorkStore = defineStore("work", {
     actions: {
         async loadForm() {
             try {
-                this.isLoadings = true
+                this.isLoading = true
                 console.log({page: this.work.pagination.page, limit: this.work.pagination.limit})
                 const response = await workService.find({
                     page: this.work.pagination.page,
@@ -36,14 +36,14 @@ export const useWorkStore = defineStore("work", {
             } catch (error: any) {
                 this.isError = error.message
             } finally {
-                this.isLoadings = false
+                this.isLoading = false
             }
         },
 
         // create one ------------------------------------------------------------------
         async create(form: WorkForm){
             try {
-                this.isLoadings = true
+                this.isLoading = true
                 const response = await workService.create(form)
                 console.log("ok useSkill", response.data)
                 return response.data
@@ -51,14 +51,14 @@ export const useWorkStore = defineStore("work", {
                 console.log(error.message)
                 this.isError = error.message
             } finally {
-                this.isLoadings = false
+                this.isLoading = false
             }
         },
 
         // find one ------------------------------------------------------------------
         async findOne(id: number){
             try {
-                this.isLoadings = true
+                this.isLoading = true
                 console.log("ok")
                 const response = await workService.findOne(id)
                 this.currentWork = response.data
@@ -66,33 +66,33 @@ export const useWorkStore = defineStore("work", {
             } catch (error: any) {
                 this.isError = error.message
             } finally {
-                this.isLoadings = false
+                this.isLoading = false
             }
         },
 
         // update one ------------------------------------------------------------------
         async updateOne(id: number, form: WorkForm){
             try {
-                this.isLoadings = true
+                this.isLoading = true
                 const response = await workService.updateOne(id, form)
                 return response.data
             } catch (error: any) {
                 this.isError = error.message
             } finally {
-                this.isLoadings = false
+                this.isLoading = false
             }
         },
 
         // delete one ------------------------------------------------------------------
         async deleteOne(id: number){
             try {
-                this.isLoadings = true
+                this.isLoading = true
                 const response = await workService.deleteOne(id)
                 return response.data
             } catch (error: any) {
                 this.isError = error.message
             } finally {
-                this.isLoadings = false
+                this.isLoading = false
             }
         },
 

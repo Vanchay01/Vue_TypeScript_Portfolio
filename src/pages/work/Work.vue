@@ -39,7 +39,7 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
-        <LoadingForm v-if="isLoadings = true"/>
+<!--        <LoadingForm v-if="isLoading = true"/>-->
         <tbody v-if="work" class="divide-y divide-gray-200">
           <tr v-for="(items, index) in work.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
@@ -62,7 +62,7 @@
       </table>
       <div>
     </div>
-      <div v-if="isLoadings" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <div class="">
       <button 
@@ -70,7 +70,7 @@
         @click="goToPage(workStore.work.pagination.page - 1)"
         class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
-        Prev
+        < Prev
       </button>
       <span class="px-1 mx-1 text-red-500 border cursor-pointer">Page {{ workStore.work.pagination.page }} of {{ workStore.work.pagination.totalPage }}</span>
       <button
@@ -78,7 +78,7 @@
         @click="goToPage(workStore.work.pagination.page + 1)"
         class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
-        Next
+        Next >
       </button>
     </div>
     <!-- Add_modal-------------------------------------------------------------------- -->
@@ -154,9 +154,9 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useWorkStore } from "../../store/useWorkStore.ts";
 import type { Work, WorkForm } from "../../types/work.ts";
-import LoadingForm from "../../components/LoadingForm.vue";
+// import LoadingForm from "../../components/LoadingForm.vue";
+import {useWorkStore} from "../../store/useWorkStore.ts";
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
@@ -165,7 +165,7 @@ const editId = ref<number | null>(null);
 const previewLogo = ref<string | null>(""); 
 const validator = ref<{ message: string }[]>([]);
 const workStore = useWorkStore();
-const { work, currentWork, isLoadings, isError} = storeToRefs(useWorkStore());
+const { work, currentWork, isLoading, isError} = storeToRefs(useWorkStore());
 const searchInput = ref("")
 let debounceTimer: ReturnType<typeof setTimeout>
 const form = reactive<WorkForm>({

@@ -113,7 +113,7 @@
       </div>
       <hr class="text-gray-400">
       <!-- body 02-->
-       <div class=" w-full flex justify-between font-medium text-sm gap-4 pt-4">
+       <div class=" w-full flex justify-between font-medium text-sm gap-4 py-4">
         <!-- time line -->
         <div class="w-1/2 flex flex-col justify-between items">
           <p>Term of study</p>
@@ -135,9 +135,31 @@
           </div>
         </div>
        </div>
+        <hr class="text-gray-400">
+        <div class="w-full  grid grid-cols-4 gap-4 font-medium text-sm  py-4">
+          <CardDegree />
+          <CardDegree />
+          <CardDegree />
+          <input id="logoId" type="file" @change="handleLogo" class="hidden" />
+          <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">
+            <img
+                v-if="previewLogo"
+                :src="previewLogo"
+                alt="No Image"
+                class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            />
+            <img
+                v-else-if="editId"
+                :src="previewLogo ? previewLogo : ``"
+                alt="No Image"
+                class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+            />
+            <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>
+          </label>
+        </div>
     </div>
   </section>
-  
+
   </article>
 </template>
 
@@ -147,6 +169,7 @@ import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/useEducationStore.ts";
 import type { Education, EducationFrom } from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
+import CardDegree from "./CardDegree.vue";
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
