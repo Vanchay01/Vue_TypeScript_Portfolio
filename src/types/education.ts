@@ -7,7 +7,7 @@ export interface Education  {
     date_end:  string,
     created_at: string,
     logo: string | null 
-    degres: []
+    degree: []
 }
 
 export interface EducationFrom{
@@ -17,6 +17,11 @@ export interface EducationFrom{
     date_start: string,
     date_end: string,
     logo: File | null | undefined
+}
+
+export interface DegreeForm{
+    by_education: number | null | undefined,
+    images: File | string | null | undefined
 }
 
 export interface EducationUpdate  {

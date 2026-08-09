@@ -1,5 +1,12 @@
 import { defineStore } from "pinia";
-import { addEducation, deleteEducation, getEducation, getEducationById, updateEducation } from "../services/educationService";
+import {
+    addDegree,
+    addEducation, deleteDegree,
+    deleteEducation,
+    getEducation,
+    getEducationById,
+    updateEducation
+} from "../services/educationService";
 import type { Education, EducationFrom } from "../types/education";
 
 
@@ -86,6 +93,32 @@ export const useEducationStore = defineStore("education", {
             } finally {
                 this.isLoading = false
             }
-        }
+        },
+
+        // add Degree ------------------------------------------------
+        async addDegree(form: EducationFrom){
+            this.isLoading = true;
+            try {
+                const response = await addDegree(form);
+                return response.data
+            } catch (error: any) {
+                this.isError = error.message
+            } finally {
+                this.isLoading = false
+            }
+        },
+
+        // delete degree ------------------------------------------------
+        async deleteDegree(id: number) {
+            this.isLoading = true;
+            try {
+                const response = await deleteDegree(id);
+                return response.data
+            } catch (error: any) {
+                this.isError = error.message
+            } finally {
+                this.isLoading = false
+            }
+        },
     }
 })

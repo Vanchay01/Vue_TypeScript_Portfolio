@@ -25,15 +25,12 @@ export const getEducationById = (id: number) => {
 
 // update education ------------------------------------------------------
 export const updateEducation = (id: number, form: EducationFrom) => {
-    console.log("Service: ",form)
     const formData = new FormData()
     Object.entries(form).forEach(([key, value]) => {
         if(value !== undefined && value !== null) {
             formData.append(key, value as any)
         }
     })
-    console.log("Inside Edit", );
-    console.log("Service updateOne converted to FormUpdate: ",formData)
     return educationAPI.updateEducation(id, formData)
 }
 
@@ -41,3 +38,20 @@ export const updateEducation = (id: number, form: EducationFrom) => {
 export const deleteEducation = (id: number) => {
     return educationAPI.deleteEducation(id)
 }
+
+// add degree ----------------------------------------------------------------
+export const addDegree = (form: EducationFrom) => {
+    const formData = new FormData()
+    Object.entries(form).forEach(([key, value]) => {
+        if(value !== undefined && value !== null){
+            formData.append(key, value as any)
+        }
+    })
+    return educationAPI.addDegree(formData)
+}
+
+// delete degree ------------------------------------------------------
+export const deleteDegree = (id: number) => {
+    return educationAPI.deleteDegree(id)
+}
+

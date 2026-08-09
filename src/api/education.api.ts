@@ -37,5 +37,16 @@ export const educationAPI = {
     const {data} = await apiURL.delete<apiResponse<Education>>(`/education/${id}`);
     return data
   },
-  
+
+  // add degree -------------------------------------------------------------
+  async addDegree(form: FormData): Promise<apiResponse<Education>>{
+    const {data} = await apiURL.post<apiResponse<Education>>(`/education/uploads`, form )
+    return data
+  },
+
+  // delete degree -------------------------------------------------------------
+  async deleteDegree(id: number): Promise<apiResponse<Education>>{
+    const {data} = await apiURL.delete<apiResponse<Education>>(`/education/remove_upload/${id}`);
+    return data
+  },
 };

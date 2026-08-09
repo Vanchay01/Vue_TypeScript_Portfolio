@@ -140,22 +140,25 @@
           <CardDegree />
           <CardDegree />
           <CardDegree />
-          <input id="logoId" type="file" @change="handleLogo" class="hidden" />
-          <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">
-            <img
-                v-if="previewLogo"
-                :src="previewLogo"
-                alt="No Image"
-                class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-            />
-            <img
-                v-else-if="editId"
-                :src="previewLogo ? previewLogo : ``"
-                alt="No Image"
-                class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-            />
-            <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>
-          </label>
+          <form >
+            <input type="text" :value="currentEducation.id" class="border hidden" />
+            <input id="logoId" type="file" @change="handleImages" class="hidden" />
+            <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">
+              <img
+                  v-if="previewLogo"
+                  :src="previewLogo"
+                  alt="No Image"
+                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+              />
+              <img
+                  v-else-if="editId"
+                  :src="previewLogo ? previewLogo : ``"
+                  alt="No Image"
+                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
+              />
+              <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>
+            </label>
+          </form>
         </div>
     </div>
   </section>
@@ -167,7 +170,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/useEducationStore.ts";
-import type { Education, EducationFrom } from "../../types/education.ts";
+import type {DegreeForm, Education, EducationFrom} from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import CardDegree from "./CardDegree.vue";
 
@@ -211,7 +214,7 @@ const handleCancel = () => {
 };
 
 
-// handleSubmit -------------------------------------------------------
+// from create -------------------------------------------------------
 const form = reactive<EducationFrom>({
   name: "Svay Reing University",
   major: "Computer Science",
@@ -220,11 +223,29 @@ const form = reactive<EducationFrom>({
   date_end: "2024-10-19",
   logo: null,
 });
+
+// form degree -------------------------------------------------------
+const degree = reactive<DegreeForm>({
+  by_education: null,
+  images: null,
+});
+
 const validator = ref<{ message: string }[]>([]);
+
+// handle logo -------------------------------------------------------
 const handleLogo = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
     form.logo = target.files[0];
+    previewLogo.value = URL.createObjectURL(target.files[0]);
+  }
+};
+
+// handle degree -------------------------------------------------------
+const handleImages = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    degree.images = target.files[0];
     previewLogo.value = URL.createObjectURL(target.files[0]);
   }
 };
@@ -268,11 +289,17 @@ const handleDelete = async (id: number) => {
   console.log(id)
 }
 
-// handle_delete --------------------------------------------------
+// handle find one--------------------------------------------------
 const handleFindOne = async (id: number) => {
   isOpenView.value = true
   await educationStore.findOne(id)
 }
+
+// handle_delete --------------------------------------------------
+const handleDegree = async () => {
+  await educationStore.addDegree(degree)
+}
+
 
 // onMounted -------------------------------------------------------
 onMounted(() => {
