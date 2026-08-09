@@ -72,7 +72,20 @@
       >
         < Prev
       </button>
-      <span class="px-1 mx-1 text-red-500 border cursor-pointer">Page {{ workStore.work.pagination.page }} of {{ workStore.work.pagination.totalPage }}</span>
+<!--      <span class="px-1 mx-1 text-red-500 border cursor-pointer">Page {{ workStore.work.pagination.page }} of {{ workStore.work.pagination.totalPage }}</span>-->
+      <!-- Page numbers -->
+      <button
+          v-for="page in visiblePages"
+          :key="page"
+          @click="goToPage(page)"
+          class="px-3 py-1 mx-1 border rounded cursor-pointer"
+          :class="{
+      'bg-red-500 text-white': page === workStore.work.pagination.page,
+      'text-red-500': page !== workStore.work.pagination.page
+    }"
+      >
+        {{ page }}
+      </button>
       <button
         :disabled="workStore.work.pagination.page === workStore.work.pagination.totalPage"
         @click="goToPage(workStore.work.pagination.page + 1)"
@@ -152,7 +165,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import {computed, onMounted, reactive, ref, watch} from "vue";
 import { storeToRefs } from "pinia";
 import type { Work, WorkForm } from "../../types/work.ts";
 // import LoadingForm from "../../components/LoadingForm.vue";
@@ -221,6 +234,20 @@ function goToPage(page: number) {
   if (page < 1 || page > workStore.work.pagination.totalPage) return
   workStore.setPage(page)
 }
+
+const visiblePages = computed(() => {
+  const currentPage = workStore.work.pagination.page
+  const totalPage = workStore.work.pagination.totalPage
+  const maxPages = 5
+  let start = Math.max(1, currentPage - 2)
+  let end = Math.min(totalPage, start + maxPages - 1)
+  start = Math.max(1, end - maxPages + 1)
+  return Array.from(
+      { length: end - start + 1 },
+      (_, index) => start + index
+  )
+})
+console.log(visiblePages.value)
 
 // clear search -------------------------------------------------------
 function clearSearch() {
