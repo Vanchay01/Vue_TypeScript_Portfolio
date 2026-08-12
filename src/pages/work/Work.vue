@@ -64,21 +64,19 @@
     </div>
       <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
-    <div class="">
-      <button 
-        :disabled="workStore.work.pagination.page === 1" 
+    <div class="flex justify-start items-center">
+      <button
+        :disabled="workStore.work.pagination.page === 1"
         @click="goToPage(workStore.work.pagination.page - 1)"
         class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
-        < Prev
+        <ChevronLeftIcon class="size-6 py-1" />
       </button>
-<!--      <span class="px-1 mx-1 text-red-500 border cursor-pointer">Page {{ workStore.work.pagination.page }} of {{ workStore.work.pagination.totalPage }}</span>-->
-      <!-- Page numbers -->
       <button
           v-for="page in visiblePages"
           :key="page"
           @click="goToPage(page)"
-          class="px-3 py-1 mx-1 border rounded cursor-pointer"
+          class="px-2.5 py-0.5 mx-1 border  cursor-pointer font-normal text-sm"
           :class="{
       'bg-red-500 text-white': page === workStore.work.pagination.page,
       'text-red-500': page !== workStore.work.pagination.page
@@ -91,7 +89,7 @@
         @click="goToPage(workStore.work.pagination.page + 1)"
         class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
-        Next >
+        <ChevronRightIcon class="size-6 py-1" />
       </button>
     </div>
     <!-- Add_modal-------------------------------------------------------------------- -->
@@ -167,6 +165,7 @@
 <script setup lang="ts">
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import { storeToRefs } from "pinia";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/outline";
 import type { Work, WorkForm } from "../../types/work.ts";
 // import LoadingForm from "../../components/LoadingForm.vue";
 import {useWorkStore} from "../../store/useWorkStore.ts";
