@@ -25,6 +25,7 @@ export const useWorkStore = defineStore("work", {
     actions: {
         async loadForm() {
             try {
+                this.work.data = []
                 this.isLoading = true
                 console.log({page: this.work.pagination.page, limit: this.work.pagination.limit})
                 const response = await workService.find({
@@ -43,6 +44,7 @@ export const useWorkStore = defineStore("work", {
         // create one ------------------------------------------------------------------
         async create(form: WorkForm){
             try {
+                
                 this.isLoading = true
                 const response = await workService.create(form)
                 console.log("ok useSkill", response.data)
@@ -101,24 +103,28 @@ export const useWorkStore = defineStore("work", {
 
         async setPage(page: number) {
             this.work.pagination.page = page
+            this.work.data = [] // clear current data to show loading state
             await this.loadForm() // re-fetch immediately with new page
         },
 
         async setLimit(limit: number) {
             this.work.pagination.limit = limit
-            this.work.pagination.page = 1 // reset to page 1 — changing page size mid-list is confusing otherwise
+            this.work.pagination.page = 1
+            this.work.data = []
             await this.loadForm()
         },
 
         async setSearch(value: string) {
             this.search = value
             this.work.pagination.page = 1
+            this.work.data = []
             await this.loadForm()
         },
 
         async clearSearch() {
             this.search = ""
             this.work.pagination.page = 1
+            this.work.data = []
             await this.loadForm()
         },
     }

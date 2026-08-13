@@ -1,22 +1,21 @@
 <template>
-    <tbody class="divide-y divide-gray-200">
-          <tr class="*:text-gray-900 *:first:font-medium font-light text-sm">
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <!-- <td class="p-1"><img v-if="items.logo_url" :src="`${items.logo_url}`"  alt="no" class="h-5 rounded-full"></td> -->
-            <td class="p-1 h-1 bg-amber-500"></td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1"> <div class="bg-amber-100">s</div> </td>
-            <td class="p-1 w-40">
-                <button class="px-1 mx-1 text-green-500 border cursor-pointer">view</button>
-                <button class="px-1 mx-1 text-yellow-500 border cursor-pointer">edit</button>
-                <button class="px-1 mx-1 text-red-500 border cursor-pointer">delete</button>
-            </td>
-          </tr>
-        </tbody>
+    <div class="divide-y divide-gray-200 animate-pulse ">
+      <div class="p-1 font-light text-sm text-center ">
+        <div class="flex-1 space-y-4.5 py-1">
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+          <div class="h-[12.5px] rounded bg-gray-200"></div>
+        </div>
+      </div>
+    </div>
 </template>
 <script setup lang="ts"></script>
+
+239.75 + 4 

@@ -23,7 +23,7 @@ const routes =[
 ]
 
 export const router = createRouter({
-    linkActiveClass: '',
+    linkActiveClass: 'bg-blue-500 text-white',
     history: createWebHistory(),
     routes
 })

@@ -1,19 +1,25 @@
 <template>
   <article class="w-full flex flex-col gap-4 p-4">
-    <h1 class="font-normal text-2xl">Project Management</h1>
+    <div class="flex justify-between items-center gap-4">
+      <h1 class="font-normal text-2xl">Project Management</h1>
+      <div class="search-bar relative">
+          <input v-model="searchInput" placeholder="Search work..." class="w-full pl-2 pr-6 border border-blue-500 font-normal text-sm cursor-pointer"/>
+          <button v-if="searchInput" @click="clearSearch" class=" absolute right-1 top-[4.5px] text-gray-500 hover:text-gray-700">
+            <XMarkIcon class="size-4 border rounded-full cursor-pointer" />
+          </button>
+      </div>
+    </div>
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Project Management</p>
-      <div class="flex justify-between items-center gap-4">
-        <div class="search-bar">
-            <input v-model="searchInput" placeholder="Search work..." />
-            <button v-if="searchInput" @click="clearSearch">Clear</button>
-        </div>
-        <select :value="workStore.work.pagination.limit" @change="workStore.setLimit(Number(($event.target as HTMLSelectElement).value))">
-            <option :value="1">1 / page</option>
-            <option :value="10">10 / page</option>
-            <option :value="25">25 / page</option>
-            <option :value="50">50 / page</option>
-            <option :value="100">100 / page</option>
+      <div class="flex justify-between items-center gap-4 font-normal text-sm cursor-pointer ">
+        <select 
+          class="px-1 border text-blue-500"
+          :value="workStore.work.pagination.limit" @change="workStore.setLimit(Number(($event.target as HTMLSelectElement).value))">
+            <option :value="1">1 Page</option>
+            <option :value="10">10 Pages</option>
+            <option :value="25">25 Pages</option>
+            <option :value="50">50 Pages</option>
+            <option :value="100">100 Pages</option>
         </select>
         <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add new project</button>
       </div>
@@ -23,7 +29,7 @@
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
-      <div v-else-if="work.data.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Project is empty!!!.</div>
+      <!-- <div v-else-if="work.data.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Project is empty!!!.</div> -->
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
@@ -39,7 +45,6 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
-<!--        <LoadingForm v-if="isLoading = true"/>-->
         <tbody v-if="work" class="divide-y divide-gray-200">
           <tr v-for="(items, index) in work.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
@@ -62,7 +67,7 @@
       </table>
       <div>
     </div>
-      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
+      <LoadingForm v-if="isLoading"/>
     </div>
     <div class="flex justify-start items-center">
       <button
@@ -165,9 +170,9 @@
 <script setup lang="ts">
 import {computed, onMounted, reactive, ref, watch} from "vue";
 import { storeToRefs } from "pinia";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "@heroicons/vue/20/solid";
 import type { Work, WorkForm } from "../../types/work.ts";
-// import LoadingForm from "../../components/LoadingForm.vue";
+import LoadingForm from "../../components/LoadingForm.vue";
 import {useWorkStore} from "../../store/useWorkStore.ts";
 
 // Event Open Modal -------------------------------------------------------
