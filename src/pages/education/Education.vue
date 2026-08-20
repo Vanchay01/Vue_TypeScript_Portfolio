@@ -1,9 +1,17 @@
 <template>
   <article class="w-full flex flex-col gap-4 p-4">
     <h1 class="font-normal text-2xl">Education Management</h1>
-    <div class="w-full flex justify-between border p-1">
+    <div class="bg-[url('https://wallpapercave.com/wp/wp12702602.jpg')] bg-cover bg-center w-full flex justify-between items-center border p-1">
       <p class="font-normal text-sm">Education Management</p>
-      <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add education</button>
+      <button @click="isOpen = true"
+      >
+        <GlassSurface
+            :height="25"
+            :border-radius="24"
+        >
+          <h2 class="text-white/70 group-hover:text-white transition-colors duration-200">Add Education</h2>
+        </GlassSurface>
+      </button>
     </div>
     <!-- Table ------------------------------------------------------ -->
     <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
@@ -140,25 +148,25 @@
           <CardDegree />
           <CardDegree />
           <CardDegree />
-          <form >
-            <input type="text" :value="currentEducation.id" class="border hidden" />
-            <input id="logoId" type="file" @change="handleImages" class="hidden" />
-            <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">
-              <img
-                  v-if="previewLogo"
-                  :src="previewLogo"
-                  alt="No Image"
-                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-              />
-              <img
-                  v-else-if="editId"
-                  :src="previewLogo ? previewLogo : ``"
-                  alt="No Image"
-                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"
-              />
-              <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>
-            </label>
-          </form>
+<!--          <form >-->
+<!--            <input type="text" :value="currentEducation.id" class="border hidden" />-->
+<!--            <input id="logoId" type="file" @change="handleImages" class="hidden" />-->
+<!--            <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">-->
+<!--              <img-->
+<!--                  v-if="previewLogo"-->
+<!--                  :src="previewLogo"-->
+<!--                  alt="No Image"-->
+<!--                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"-->
+<!--              />-->
+<!--              <img-->
+<!--                  v-else-if="editId"-->
+<!--                  :src="previewLogo ? previewLogo : ``"-->
+<!--                  alt="No Image"-->
+<!--                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"-->
+<!--              />-->
+<!--              <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>-->
+<!--            </label>-->
+<!--          </form>-->
         </div>
     </div>
   </section>
@@ -170,9 +178,10 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/useEducationStore.ts";
-import type {DegreeForm, Education, EducationFrom} from "../../types/education.ts";
+import type {Education, EducationFrom} from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import CardDegree from "./CardDegree.vue";
+import GlassSurface from "../../components/GlassSurface.vue";
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
@@ -225,10 +234,10 @@ const form = reactive<EducationFrom>({
 });
 
 // form degree -------------------------------------------------------
-const degree = reactive<DegreeForm>({
-  by_education: null,
-  images: null,
-});
+// const degree = reactive<DegreeForm>({
+//   by_education: null,
+//   images: null,
+// });
 
 const validator = ref<{ message: string }[]>([]);
 
@@ -242,13 +251,13 @@ const handleLogo = (event: Event) => {
 };
 
 // handle degree -------------------------------------------------------
-const handleImages = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (target.files && target.files.length > 0) {
-    degree.images = target.files[0];
-    previewLogo.value = URL.createObjectURL(target.files[0]);
-  }
-};
+// const handleImages = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   if (target.files && target.files.length > 0) {
+//     degree.images = target.files[0];
+//     previewLogo.value = URL.createObjectURL(target.files[0]);
+//   }
+// };
 
 // ---
 const handleSubmit = async () => {
@@ -296,9 +305,9 @@ const handleFindOne = async (id: number) => {
 }
 
 // handle_delete --------------------------------------------------
-const handleDegree = async () => {
-  await educationStore.addDegree(degree)
-}
+// const handleDegree = async () => {
+//   await educationStore.addDegree(degree)
+// }
 
 
 // onMounted -------------------------------------------------------
