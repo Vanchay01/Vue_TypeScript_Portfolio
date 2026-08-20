@@ -2,15 +2,35 @@
   <article class="w-full flex flex-col gap-4 p-4">
     <h1 class="font-normal text-2xl">Education Management</h1>
     <div class="bg-[url('https://wallpapercave.com/wp/wp12702602.jpg')] bg-cover bg-center w-full flex justify-between items-center border p-1">
-      <p class="font-normal text-sm">Education Management</p>
+      <p class="font-normal text-white  text-md">Education Management</p>
       <button @click="isOpen = true"
       >
-        <GlassSurface
-            :height="25"
-            :border-radius="24"
+<!--        <GlassSurface-->
+<!--            :height="25"-->
+<!--            :border-radius="24"-->
+<!--        >-->
+<!--          <h2 class="text-white/70 group-hover:text-white transition-colors duration-200">Add Education</h2>-->
+<!--        </GlassSurface>-->
+        <SpecularButton
+            size="md"
+            :radius="20"
+            tint="#ffffff"
+            :tint-opacity="0"
+            :blur="10"
+            text-color="#f5f5f5"
+            line-color="#ffffff"
+            base-color="#525252"
+            :intensity="1"
+            :shine-size="10"
+            :shine-fade="40"
+            :thickness="1"
+            :speed="0.35"
+            follow-mouse
+            :proximity="250"
+            :auto-animate="false"
         >
-          <h2 class="text-white/70 group-hover:text-white transition-colors duration-200">Add Education</h2>
-        </GlassSurface>
+          Add Education
+        </SpecularButton>
       </button>
     </div>
     <!-- Table ------------------------------------------------------ -->
@@ -182,6 +202,7 @@ import type {Education, EducationFrom} from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import CardDegree from "./CardDegree.vue";
 import GlassSurface from "../../components/GlassSurface.vue";
+import SpecularButton from "../../components/SpecularButton.vue"
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
