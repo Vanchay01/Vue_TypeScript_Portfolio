@@ -1,21 +1,9 @@
 <template>
-    <div class="divide-y divide-gray-200 animate-pulse ">
-      <div class="p-1 font-light text-sm text-center ">
-        <div class="flex-1 space-y-4.5 py-1">
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-          <div class="h-[12.5px] rounded bg-gray-200"></div>
-        </div>
-      </div>
+    <div class="w-full h-full flex justify-center items-center">
+      <div class="size-15 animate-spin rounded-full border-2 border-gray-900/15 border-t-gray-900"/>
     </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 239.75 + 4 

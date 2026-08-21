@@ -30,8 +30,11 @@ export const useEducationStore = defineStore("education", {
         async LoadForm() {
             this.isLoading = true;
             try {
+                console.log("s")
                 const response = await getEducation();
                 this.education = response.data;
+                console.log(response)
+                return
             } catch (error: any) {
                 this.isError = error.message || "An error occurred while fetching education data.";
             } finally {

@@ -1,5 +1,5 @@
 <template>
-  <article class="w-full flex flex-col gap-4 p-4">
+  <article class="w-full h-full  flex flex-col gap-4 p-4">
     <div class="flex justify-between items-center gap-4">
       <h1 class="font-normal text-2xl">Project Management</h1>
       <div class="search-bar relative">
@@ -12,7 +12,7 @@
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Project Management</p>
       <div class="flex justify-between items-center gap-4 font-normal text-sm cursor-pointer ">
-        <select 
+        <select
           class="px-1 border text-blue-500"
           :value="workStore.work.pagination.limit" @change="workStore.setLimit(Number(($event.target as HTMLSelectElement).value))">
             <option :value="1">1 Page</option>
@@ -24,14 +24,21 @@
         <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add new project</button>
       </div>
     </div>
-    
-    
+
+    <!-- isLoading ------------------------------------------------------ -->
+    <div v-if="isLoading" class="w-full h-full" ><LoadingForm /></div>
+
+    <!-- isError ------------------------------------------------------ -->
+    <div v-else-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
+
+    <!-- isEmpty ------------------------------------------------------ -->
+    <div v-else-if="work.data.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Project is empty!!!.</div>
+
     <!-- Table ------------------------------------------------------ -->
-    <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
-      <!-- <div v-else-if="work.data.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Project is empty!!!.</div> -->
-      <table class="min-w-full f;ec divide-y-2 divide-gray-200">
-        <thead class="ltr:text-left rtl:text-right"> 
+    <div v-else class="overflow-x-auto rounded border border-gray-300 shadow-sm">
+      <table class="min-w-full divide-y-2 divide-gray-200">
+        <!-- Head ------------------------------------------------------ -->
+        <thead class="ltr:text-left rtl:text-right">
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
             <th class="p-1">No.</th>
             <th class="p-1">Id</th>
@@ -45,6 +52,7 @@
             <th class="p-1">action</th>
           </tr>
         </thead>
+        <!-- Body ------------------------------------------------------ -->
         <tbody v-if="work" class="divide-y divide-gray-200">
           <tr v-for="(items, index) in work.data" :key="items.id" class="*:text-gray-900 *:first:font-medium font-light text-sm">
             <td class="p-1">{{ index + 1 }}</td>
@@ -65,15 +73,14 @@
           </tr>
         </tbody>
       </table>
-      <div>
     </div>
-      <LoadingForm v-if="isLoading"/>
-    </div>
-    <div class="flex justify-start items-center">
+
+    <!-- pagination ------------------------------------------------------ -->
+    <div v-if="!isLoading" class="flex justify-start items-center">
       <button
-        :disabled="workStore.work.pagination.page === 1"
-        @click="goToPage(workStore.work.pagination.page - 1)"
-        class="px-1 mx-1 text-red-500 border cursor-pointer"
+          :disabled="workStore.work.pagination.page === 1"
+          @click="goToPage(workStore.work.pagination.page - 1)"
+          class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
         <ChevronLeftIcon class="size-6 py-1" />
       </button>
@@ -90,9 +97,9 @@
         {{ page }}
       </button>
       <button
-        :disabled="workStore.work.pagination.page === workStore.work.pagination.totalPage"
-        @click="goToPage(workStore.work.pagination.page + 1)"
-        class="px-1 mx-1 text-red-500 border cursor-pointer"
+          :disabled="workStore.work.pagination.page === workStore.work.pagination.totalPage"
+          @click="goToPage(workStore.work.pagination.page + 1)"
+          class="px-1 mx-1 text-red-500 border cursor-pointer"
       >
         <ChevronRightIcon class="size-6 py-1" />
       </button>
@@ -163,7 +170,7 @@
        </div>
     </div>
   </section>
-  
+
   </article>
 </template>
 

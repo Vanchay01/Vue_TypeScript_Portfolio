@@ -1,14 +1,20 @@
 <template>
-  <article class="w-full flex flex-col gap-4 p-4">
+  <article class="w-full h-full flex flex-col gap-4 p-4">
     <h1 class="font-normal text-2xl">Skill Management</h1>
     <div class="w-full flex justify-between border p-1">
       <p class="font-normal text-sm">Skill Management</p>
       <button @click="isOpen = true" class="px-1 mx-1 border text-blue-500 font-normal text-sm cursor-pointer">Add new skill</button>
     </div>
+    <!-- isLoading ------------------------------------------------------ -->
+    <div v-if="isLoading" class="w-full h-full"><LoadingForm /></div>
+
+    <!-- isError ------------------------------------------------------ -->
+    <div v-else-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
+
+    <!-- Empty ------------------------------------------------------ -->
+    <div v-else-if="skill.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Skill Is Empty!!!.</div>
     <!-- Table ------------------------------------------------------ -->
-    <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
-      <div v-else-if="skill.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Skill Is Empty!!!.</div>
+    <div v-else class="overflow-x-auto  rounded border border-gray-300 shadow-sm">
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
@@ -37,7 +43,6 @@
           </tr>
         </tbody>
       </table>
-      <div v-if="isLoading" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Loading...</div>
     </div>
     <!-- Add_modal-------------------------------------------------------------------- -->
     <section v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center">
@@ -124,6 +129,7 @@ import { onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useSkillStore } from "../../store/useSkillStore.ts";
 import type { Skill, skillFrom } from "../../types/skill.ts";
+import LoadingForm from "../../components/LoadingForm.vue";
 
 // JSON SKILL Option ----------------------------------------------------------
 const skillOption = [

@@ -15,6 +15,7 @@ export const addEducation = (form: EducationFrom) => {
 
 // fetch education ----------------------------------------------------------------
 export const getEducation = () => {
+    console.log("ssssssssss")
     return educationAPI.getAll()
 }
 

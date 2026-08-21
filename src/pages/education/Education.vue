@@ -1,5 +1,5 @@
 <template>
-  <article class="w-full flex flex-col gap-4 p-4">
+  <article class="w-full h-full flex flex-col gap-4 p-4">
     <h1 class="font-normal text-2xl">Education Management</h1>
     <div class="bg-[url('https://wallpapercave.com/wp/wp12702602.jpg')] bg-cover bg-center w-full flex justify-between items-center border p-1">
       <p class="font-normal text-white  text-md">Education Management</p>
@@ -12,18 +12,18 @@
 <!--          <h2 class="text-white/70 group-hover:text-white transition-colors duration-200">Add Education</h2>-->
 <!--        </GlassSurface>-->
         <SpecularButton
-            size="md"
+            size="sm"
             :radius="20"
-            tint="#ffffff"
-            :tint-opacity="0"
-            :blur="10"
-            text-color="#f5f5f5"
+            tint="#000000"
+            :tint-opacity="0.24"
+            :blur="20"
+            text-color="#ffffff"
             line-color="#ffffff"
-            base-color="#525252"
-            :intensity="1"
+            base-color="#3a3a3a"
+            :intensity="1.1"
             :shine-size="10"
             :shine-fade="40"
-            :thickness="1"
+            :thickness="1.1"
             :speed="0.35"
             follow-mouse
             :proximity="250"
@@ -33,12 +33,19 @@
         </SpecularButton>
       </button>
     </div>
+    <!-- isLoading ------------------------------------------------------ -->
+    <div v-if="isLoading" class="w-full h-full"><LoadingForm /></div>
+
+    <!-- isError ------------------------------------------------------ -->
+    <div v-else-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
+
+    <!-- Empty ------------------------------------------------------ -->
+    <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
     <!-- Table ------------------------------------------------------ -->
-    <div class="overflow-x-auto rounded border border-gray-300 shadow-sm">
-      <div v-if="isError" class="p-1 font-light text-sm text-center text-red-500 bg-red-500/20">Error: {{ isError }}</div>
-      <div v-else-if="education.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Education Is Empty!!!.</div>
+    <div v-else class="overflow-x-auto  rounded border border-gray-300 shadow-sm">
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
-        <thead class="ltr:text-left rtl:text-right"> 
+        <!-- Head ------------------------------------------------------ -->
+        <thead class="ltr:text-left rtl:text-right">
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">
             <th class="p-1">No.</th>
             <th class="p-1">Id</th>
@@ -201,8 +208,9 @@ import { useEducationStore } from "../../store/useEducationStore.ts";
 import type {Education, EducationFrom} from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import CardDegree from "./CardDegree.vue";
-import GlassSurface from "../../components/GlassSurface.vue";
+// import GlassSurface from "../../components/GlassSurface.vue";
 import SpecularButton from "../../components/SpecularButton.vue"
+import LoadingForm from "../../components/LoadingForm.vue";
 
 // Event Open Modal -------------------------------------------------------
 const isOpen = ref<boolean>(false);
@@ -309,7 +317,7 @@ const handleSubmit = async () => {
   handleCancel();
   return
 };
-console.log("asdasd",editId.value)
+
 // handle_delete --------------------------------------------------
 const handleDelete = async (id: number) => {
   const ok = window.confirm("Are you sure? You want to delete this education.");
