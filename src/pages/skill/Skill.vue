@@ -14,7 +14,7 @@
     <!-- Empty ------------------------------------------------------ -->
     <div v-else-if="skill.length <= 0" class="p-1 font-light text-sm text-center text-green-500 bg-green-500/20">Skill Is Empty!!!.</div>
     <!-- Table ------------------------------------------------------ -->
-    <div v-else class="overflow-x-auto  rounded border border-gray-300 shadow-sm">
+    <div v-else class="overflow-x-auto rounded border border-gray-300 shadow-sm">
       <table class="min-w-full f;ec divide-y-2 divide-gray-200">
         <thead class="ltr:text-left rtl:text-right"> 
           <tr class="*:font-medium *:text-gray-500 bg-gray-500/20 text-sm">

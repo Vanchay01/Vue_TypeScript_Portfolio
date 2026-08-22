@@ -6,8 +6,19 @@ export interface Education  {
     date_start: string,
     date_end:  string,
     created_at: string,
-    logo: string | null 
-    degree: []
+    logo: string | null
+    degree: Degree[]
+}
+
+export interface Degree {
+    id: number,
+    originalname: string,
+    filename: string,
+    path: string,
+    size: number,
+    encoding: string,
+    created_at: string,
+    by_education: number
 }
 
 export interface EducationFrom{

@@ -1,6 +1,6 @@
 // services/education.service.ts
 import { educationAPI } from "../api/education.api";
-import type { EducationFrom } from "../types/education";
+import type { EducationFrom, DegreeForm } from "../types/education";
 
 // add education ----------------------------------------------------------------
 export const addEducation = (form: EducationFrom) => {
@@ -41,7 +41,7 @@ export const deleteEducation = (id: number) => {
 }
 
 // add degree ----------------------------------------------------------------
-export const addDegree = (form: EducationFrom) => {
+export const addDegree = (form: DegreeForm) => {
     const formData = new FormData()
     Object.entries(form).forEach(([key, value]) => {
         if(value !== undefined && value !== null){

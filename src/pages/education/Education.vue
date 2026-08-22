@@ -171,29 +171,33 @@
         </div>
        </div>
         <hr class="text-gray-400">
-        <div class="w-full  grid grid-cols-4 gap-4 font-medium text-sm  py-4">
-          <CardDegree />
-          <CardDegree />
-          <CardDegree />
-<!--          <form >-->
-<!--            <input type="text" :value="currentEducation.id" class="border hidden" />-->
-<!--            <input id="logoId" type="file" @change="handleImages" class="hidden" />-->
-<!--            <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-4 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer">-->
-<!--              <img-->
-<!--                  v-if="previewLogo"-->
-<!--                  :src="previewLogo"-->
-<!--                  alt="No Image"-->
-<!--                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"-->
-<!--              />-->
-<!--              <img-->
-<!--                  v-else-if="editId"-->
-<!--                  :src="previewLogo ? previewLogo : ``"-->
-<!--                  alt="No Image"-->
-<!--                  class="h-11 object-cover rounded-md text-[#66668A] text-[10px] font-bold flex flex-col justify-center items-center"-->
-<!--              />-->
-<!--              <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>-->
-<!--            </label>-->
-<!--          </form>-->
+        <div class="w-full grid grid-cols-4 gap-4 font-medium text-sm  py-4">
+          <div v-for="items in currentEducation?.degree" :key="items.id" class="w-full">
+            <CardDegree :degree="items" @delete="handleDeleteDegree" />
+          </div>
+          <form v-if="currentEducation?.degree && currentEducation?.degree.length < 4" id="degreeForm" @submit.prevent="handleAddDegree">
+            <input type="text" :value="currentEducation?.id" class="border hidden" />
+            <input id="logoId" type="file" @change="handleImages" class="hidden" />
+            <label for="logoId" class=" border border-[#22223A] h-56 bg-gray-500/20 p-1 rounded-md border-dashed flex flex-col justify-center items-center cursor-pointer overflow-hidden">
+              <img
+                  v-if="previewLogo"
+                  :src="previewLogo"
+                  alt="No Image"
+                  class="h-full w-full object-cover rounded-md border border-[#22223A]"
+              />
+              <img
+                  v-else-if="editId"
+                  :src="previewLogo ? previewLogo : ``"
+                  alt="No Image"
+                  class="h-full w-full object-cover rounded-md border border-[#22223A]"
+              />
+              <span v-else class="text-gray-500 text-[10px] font-bold flex flex-col justify-center items-center text-center">Click to upload the degree</span>
+
+            </label>
+          </form>
+        </div>
+        <div v-if="degree.images" class="w-full flex justify-end pt-2">
+          <button type="submit" form="degreeForm" class="border text-blue-500 bg-blue-500/20 cursor-pointer px-3 py-1">Submit</button>
         </div>
     </div>
   </section>
@@ -205,7 +209,7 @@
 import { computed, onMounted, reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useEducationStore } from "../../store/useEducationStore.ts";
-import type {Education, EducationFrom} from "../../types/education.ts";
+import type {Education, EducationFrom,DegreeForm} from "../../types/education.ts";
 import { educationSchema } from "../../validation/education.schema.ts";
 import CardDegree from "./CardDegree.vue";
 // import GlassSurface from "../../components/GlassSurface.vue";
@@ -263,10 +267,10 @@ const form = reactive<EducationFrom>({
 });
 
 // form degree -------------------------------------------------------
-// const degree = reactive<DegreeForm>({
-//   by_education: null,
-//   images: null,
-// });
+const degree = reactive<DegreeForm>({
+  by_education: null,
+  images: null,
+});
 
 const validator = ref<{ message: string }[]>([]);
 
@@ -280,13 +284,13 @@ const handleLogo = (event: Event) => {
 };
 
 // handle degree -------------------------------------------------------
-// const handleImages = (event: Event) => {
-//   const target = event.target as HTMLInputElement;
-//   if (target.files && target.files.length > 0) {
-//     degree.images = target.files[0];
-//     previewLogo.value = URL.createObjectURL(target.files[0]);
-//   }
-// };
+const handleImages = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    degree.images = target.files[0];
+    previewLogo.value = URL.createObjectURL(target.files[0]);
+  }
+};
 
 // ---
 const handleSubmit = async () => {
@@ -333,10 +337,25 @@ const handleFindOne = async (id: number) => {
   await educationStore.findOne(id)
 }
 
-// handle_delete --------------------------------------------------
-// const handleDegree = async () => {
-//   await educationStore.addDegree(degree)
-// }
+// handle add degree --------------------------------------------------
+const handleAddDegree = async () => {
+  if (!currentEducation.value || !degree.images) return;
+
+  degree.by_education = currentEducation.value.id;
+  await educationStore.addDegree(degree)
+  await educationStore.findOne(currentEducation.value.id)
+
+  degree.images = null;
+  previewLogo.value = "";
+}
+
+// handle delete degree --------------------------------------------------
+const handleDeleteDegree = async (id: number) => {
+  if (!currentEducation.value) return;
+
+  await educationStore.deleteDegree(id)
+  await educationStore.findOne(currentEducation.value.id)
+}
 
 
 // onMounted -------------------------------------------------------

@@ -7,7 +7,7 @@ import {
     getEducationById,
     updateEducation
 } from "../services/educationService";
-import type { Education, EducationFrom } from "../types/education";
+import type { Education, EducationFrom, DegreeForm } from "../types/education";
 
 
 interface EducationState {
@@ -99,7 +99,7 @@ export const useEducationStore = defineStore("education", {
         },
 
         // add Degree ------------------------------------------------
-        async addDegree(form: EducationFrom){
+        async addDegree(form: DegreeForm){
             this.isLoading = true;
             try {
                 const response = await addDegree(form);
